@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Walls
+  - Hero
+  - Floor
+  - Guard
+  - Interactable
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: 'Background '
+    uniqueID: 739438607
+    locked: 0
+  - name: World
+    uniqueID: 3908703975
+    locked: 0
+  - name: Characters
+    uniqueID: 2813394577
+    locked: 0
+  - name: VFX
+    uniqueID: 4109763461
+    locked: 0
+  - name: UI
+    uniqueID: 3107838203
+    locked: 0
