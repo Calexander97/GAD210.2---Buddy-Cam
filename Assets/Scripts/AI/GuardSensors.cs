@@ -16,7 +16,7 @@ public class GuardSensors : MonoBehaviour
     float heardTimer;
 
     void OnEnable() => NoiseSystem.OnNoise += OnNoiseHeard;
-    void OnDisable() => NoiseSystem.OnNoise -= OnNoisedHeard;
+    void OnDisable() => NoiseSystem.OnNoise -= OnNoiseHeard;
 
     void Update()
     {

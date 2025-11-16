@@ -139,7 +139,7 @@ ScriptedImporter:
       y: 4
       width: 10
       height: 12
-    spriteID: 1da39e3b703934b4486d05336d2bf29a
+    spriteID: ec0033ec677273042adde283265c35b2
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -157,7 +157,7 @@ ScriptedImporter:
       value1: 0
       value2: 0
       value3: 0
-    guid: 1749345746
+    guid: 0
     name: CopBuddy_Guard
     layerFlags: 0
     layerType: 0
@@ -171,25 +171,13 @@ ScriptedImporter:
         y: 3
         width: 10
         height: 12
-      spriteId: 1da39e3b703934b4486d05336d2bf29a
+      spriteId: ec0033ec677273042adde283265c35b2
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
     parentIndex: -1
   tileSets: []
-  platformSettings:
-  - name: Default
-    overridden: 0
-    ignorePlatformSupport: 0
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
+  platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 

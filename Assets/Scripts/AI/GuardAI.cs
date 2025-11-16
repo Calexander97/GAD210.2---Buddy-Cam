@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-/// Simple state machine: Patrol → Investigate (search LKP) → Alerted (chase).
-/// Uses NavMeshAgent configured for XY (updateUpAxis=false/updateRotation=false).
+/// Simple state machine: Patrol → Investigate → Alerted (chase).
+/// Works on a top-down (XY) NavMesh: updateUpAxis=false / updateRotation=false.
 [DisallowMultipleComponent]
 [RequireComponent(typeof(NavMeshAgent))]
 public class GuardAI : MonoBehaviour
@@ -15,7 +15,12 @@ public class GuardAI : MonoBehaviour
     public float waypointTolerance = 0.15f;
 
     [Header("Search")]
-    public float dwellAtSpot = 1.2f;        // wait time at each search point
+    public float dwellAtSpot = 1.2f; // time to wait at each search point
+
+    [Header("Facing")]
+    public float faceLerp = 18f;        // how quickly to rotate
+    public bool forwardIsUp = true;     // true if your sprite art faces ↑
+    public float stopThreshold = 0.02f; // avoid jitter when almost stopped
 
     public enum State { Patrol, Investigate, Alerted }
     public State state = State.Patrol;
@@ -26,12 +31,13 @@ public class GuardAI : MonoBehaviour
     float totalSearchTime;
     Vector2 searchCenter;
     Vector2 currentSearchTarget;
+    Vector2 lastMoveDir = Vector2.right; // remembered heading for idle facing
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.updateUpAxis = false;
-        agent.updateRotation = false;
+        agent.updateUpAxis = false;    // 2D top-down plane
+        agent.updateRotation = false;  // we handle rotation manually
         if (!sensors) sensors = GetComponent<GuardSensors>();
     }
 
@@ -46,7 +52,7 @@ public class GuardAI : MonoBehaviour
 
     void Update()
     {
-        // Core behaviour per state
+        // --- Core behaviour per state ---
         switch (state)
         {
             case State.Patrol: TickPatrol(); break;
@@ -54,29 +60,44 @@ public class GuardAI : MonoBehaviour
             case State.Alerted: TickAlerted(); break;
         }
 
-        // Pereception driven transitions
+        // --- Perception-driven transitions ---
         if (sensors && profile)
         {
-            if (sensors && profile)
+            if (sensors.targetVisible)
             {
-                if (sensors.targetVisible)
-                {
-                    state = State.Alerted;
-                    agent.speed = profile.chaseSpeed;
-                }
-                else if (state == State.Alerted && !sensors.targetVisible)
-                {
-                    BeginInvestigate(sensors.lastSeenPos);
-                }
-                else if (state == State.Patrol && sensors.heardRecently)
-                {
-                    BeginInvestigate(sensors.lastHeardPos);
-                }
+                state = State.Alerted;
+                agent.speed = profile.chaseSpeed;
+            }
+            else if (state == State.Alerted && !sensors.targetVisible)
+            {
+                BeginInvestigate(sensors.lastSeenPos);
+            }
+            else if (state == State.Patrol && sensors.heardRecently)
+            {
+                BeginInvestigate(sensors.lastHeardPos);
             }
         }
 
-        // --- States ---
+        // --- Face movement direction (smooth, like the hero) ---
+        Vector3 v3 = agent.velocity;
+        Vector2 v = new Vector2(v3.x, v3.y);
 
+        Vector2 dir;
+        if (v.sqrMagnitude > stopThreshold * stopThreshold)
+        {
+            dir = v.normalized;
+            lastMoveDir = dir; // remember last meaningful heading
+        }
+        else
+        {
+            dir = lastMoveDir;
+        }
+
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        var targetRot = Quaternion.Euler(0f, 0f, forwardIsUp ? (angle - 90f) : angle);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, faceLerp * Time.deltaTime);
+
+        // ---------------- Local functions ----------------
         void TickPatrol()
         {
             if (patrolPoints == null || patrolPoints.Length == 0) return;
@@ -105,7 +126,7 @@ public class GuardAI : MonoBehaviour
 
             totalSearchTime += Time.deltaTime;
 
-            // Arrived at current search point → dwell briefly, then pick another
+            // Arrived → dwell a moment, then choose another local point
             if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
             {
                 searchTimer += Time.deltaTime;
@@ -116,7 +137,7 @@ public class GuardAI : MonoBehaviour
                 }
             }
 
-            // Give up after total search time
+            // Time-out → resume patrol
             if (totalSearchTime >= profile.searchTime)
             {
                 state = State.Patrol;
@@ -132,8 +153,6 @@ public class GuardAI : MonoBehaviour
             agent.SetDestination(sensors.target.position);
         }
 
-        // --- Helpers ---
-
         void PickNewSearchPoint()
         {
             if (!profile) return;
@@ -141,7 +160,7 @@ public class GuardAI : MonoBehaviour
             Vector2 offset = Random.insideUnitCircle * profile.searchRadius;
             currentSearchTarget = searchCenter + offset;
 
-            // Snap to mesh so the agent always gets a valid goal
+            // Snap to mesh so the destination is always valid
             if (NavMesh.SamplePosition(currentSearchTarget, out var hit, 1.5f, NavMesh.AllAreas))
                 agent.SetDestination(hit.position);
             else
