@@ -59,9 +59,7 @@ public class KeypadPuzzle : MonoBehaviour
         if (currentInput == correctCode)
         {
             Debug.Log("Access Granted!");
-            if (activeHack != null)
-                activeHack.UnlockDoor();
-
+            activeHack?.UnlockDoor();
             CloseKeypad();
         }
         else
