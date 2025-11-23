@@ -4,13 +4,7 @@ public class Interactable : MonoBehaviour
 {
     public InteractionManager interactionManager;
 
-    public bool PlayerInRange
-    {
-        get
-        {
-            return interactionManager != null && interactionManager.CurrentInteractable == this;
-        }
-    }
+    public bool PlayerInRange => interactionManager != null && interactionManager.CurrentInteractable == this;
 
     public virtual void Interact(GameObject player)
     {

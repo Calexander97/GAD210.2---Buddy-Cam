@@ -12,7 +12,7 @@ public class KeypadPuzzle : MonoBehaviour
 
     private string currentInput = "";
     private Hack activeHack;
-    private PlayerMovement playerMovement;
+    private HeroNavAgent2D heroController;
     private bool isOpen = false;
 
     private void Start()
@@ -31,9 +31,15 @@ public class KeypadPuzzle : MonoBehaviour
         keypadPanel.SetActive(true);
         isOpen = true;
 
-        playerMovement = player.GetComponent<PlayerMovement>();
-        if (playerMovement != null)
-            playerMovement.canMove = false;
+        // stop hero movement
+        heroController = player.GetComponent<HeroNavAgent2D>();
+        if (heroController != null)
+        {
+            heroController.agent.isStopped = true;
+        }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void PressNumber(string num)
@@ -83,14 +89,17 @@ public class KeypadPuzzle : MonoBehaviour
         keypadPanel.SetActive(false);
         isOpen = false;
 
-        if (activeHack != null && playerMovement != null)
-            activeHack.OnKeypadClosed(playerMovement.gameObject);
+        // re-enable hero movement
+        if (heroController != null)
+        {
+            heroController.agent.isStopped = false;
+        }
 
-        if (playerMovement != null)
-            playerMovement.canMove = true;
+        if (activeHack != null)
+            activeHack.OnKeypadClosed(heroController.gameObject);
 
         activeHack = null;
-        playerMovement = null;
+        heroController = null;
         currentInput = "";
         UpdateDisplay();
     }
