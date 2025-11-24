@@ -1,37 +1,42 @@
 ﻿using UnityEngine;
 
-/// Fires if the AI is Alerted, has LOS, and target is within shootRange.
-/// Movement is GuardAI’s job. No approach/hold logic here.
 [RequireComponent(typeof(GuardAI))]
 public class GuardShooter : MonoBehaviour
 {
     public Projectile projectilePrefab;
-    public Transform muzzle;          // optional; uses transform if null
-    public float shootRange = 4f;     // keep ≥ than whatever distance you expect to shoot at
-    public float cooldown = 0.35f;    // fire rate limiter
+    public float shootRange = 6f;
+    public float cooldown = 0.6f;
+    public Transform muzzle;
 
     GuardAI ai;
     float cd;
+    HeroHealth targetHealth;
 
     void Awake() => ai = GetComponent<GuardAI>();
 
-    void Update()
+    void LateUpdate()
     {
-        if (cd > 0f) cd -= Time.deltaTime;
-        if (!ai || ai.state != GuardAI.State.Alerted) return;
-        var s = ai.sensors; if (!s || !s.target) return;
-
-        // Must have LOS and be in range
-        Vector2 to = s.target.position - transform.position;
-        if (!s.targetVisible || to.sqrMagnitude > shootRange * shootRange) return;
-
-        if (cd <= 0f)
+        // refresh target + health ref if needed
+        if (ai && ai.sensors && (!targetHealth || ai.sensors.target != targetHealth.transform))
         {
-            cd = cooldown;
-            var spawn = muzzle ? muzzle.position : transform.position;
-            var proj = Instantiate(projectilePrefab, spawn, Quaternion.identity);
-            proj.transform.right = to.normalized;
-            proj.Launch(to);
+            var t = ai.sensors.target;
+            targetHealth = t ? t.GetComponent<HeroHealth>() : null;
         }
+
+        if (cd > 0f) cd -= Time.deltaTime;
+
+        // Only shoot when actively Alerted, target visible, and target alive
+        if (!ai || ai.state != GuardAI.State.Alerted) return;
+        if (!ai.sensors || !ai.sensors.targetVisible) return;
+        if (!targetHealth || targetHealth.Current <= 0 || !targetHealth.gameObject.activeInHierarchy) return;
+
+        Vector2 to = ai.sensors.target.position - transform.position;
+        if (to.sqrMagnitude > shootRange * shootRange) return;
+        if (cd > 0f) return;
+
+        cd = cooldown;
+        var proj = Instantiate(projectilePrefab, muzzle ? muzzle.position : transform.position, Quaternion.identity);
+        proj.transform.right = to.normalized;
+        proj.Launch(to);
     }
 }

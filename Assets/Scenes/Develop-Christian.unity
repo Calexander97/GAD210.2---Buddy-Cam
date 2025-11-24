@@ -1569,6 +1569,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527909418}
   m_CullTransparentMesh: 1
+--- !u!1 &600058983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600058985}
+  - component: {fileID: 600058984}
+  m_Layer: 0
+  m_Name: AlertManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &600058984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600058983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02e7ab7f860d3da41a0c4e10f717b674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlertManager
+  radioRange: 18
+--- !u!4 &600058985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600058983}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.99854, y: 1.52424, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &615759590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,9 +1853,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardShooter
   projectilePrefab: {fileID: 1663650898532279960, guid: bca96ac6e2c454d48bdd8e35cc8652af, type: 3}
-  muzzle: {fileID: 0}
   shootRange: 8
   cooldown: 0.6
+  muzzle: {fileID: 0}
 --- !u!1001 &934309879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2116,6 +2161,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1781976150}
+    - target: {fileID: 4487745973052328611, guid: e5b35a3a265e3b34b8182478dff04836, type: 3}
+      propertyPath: debugLogs
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4487745973052328611, guid: e5b35a3a265e3b34b8182478dff04836, type: 3}
       propertyPath: dwellAtSpot
       value: 1.5
@@ -5074,9 +5123,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardShooter
   projectilePrefab: {fileID: 1663650898532279960, guid: bca96ac6e2c454d48bdd8e35cc8652af, type: 3}
-  muzzle: {fileID: 0}
   shootRange: 4
   cooldown: 0.6
+  muzzle: {fileID: 0}
 --- !u!4 &1781976150 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 999377685217698036, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
@@ -6681,6 +6730,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2741776740558518847, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7062,6 +7115,7 @@ SceneRoots:
   - {fileID: 321567397}
   - {fileID: 512791026}
   - {fileID: 619394802}
+  - {fileID: 600058985}
   - {fileID: 9140445652581784522}
   - {fileID: 1223028554}
   - {fileID: 3882209461723578838}

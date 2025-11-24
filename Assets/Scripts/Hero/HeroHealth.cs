@@ -1,12 +1,15 @@
+using System; // <-- add this at top
 using UnityEngine;
 using UnityEngine.Events;
 
 public class HeroHealth : MonoBehaviour
 {
     [Range(1, 10)] public int maxHearts = 3;
-    public float iFrames = 0.3f;           // brief invulnerability after a hit
+    public float iFrames = 0.3f;
     public UnityEvent onDamaged;
     public UnityEvent onDeath;
+
+    public event Action OnDied;   // <-- add this
 
     int hearts;
     float invulnTimer;
@@ -29,7 +32,7 @@ public class HeroHealth : MonoBehaviour
         if (hearts == 0)
         {
             onDeath?.Invoke();
-            // Disable input / play anim etc.
+            OnDied?.Invoke();          // <-- invoke the C# event too
             gameObject.SetActive(false);
         }
     }
