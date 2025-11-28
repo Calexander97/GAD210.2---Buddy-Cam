@@ -28,7 +28,7 @@ public class Tile : MonoBehaviour
 
         Button btn = GetComponent<Button>();
         btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => OnClick(false));
+        btn.onClick.AddListener(OnLeftClick); // left click = normal button click
     }
 
     public void SetClue(int number)
@@ -37,27 +37,55 @@ public class Tile : MonoBehaviour
             numberText.text = number.ToString();
     }
 
-    public void OnClick(bool flag = false)
+    void Update()
+    {
+        if (isRevealedClue) return; // clues cannot be toggled
+
+        // detect right click
+        if (Input.GetMouseButtonDown(1))
+        {
+            // check if mouse is over this tile
+            if (RectTransformUtility.RectangleContainsScreenPoint(
+                img.rectTransform,
+                Input.mousePosition,
+                null))
+            {
+                OnRightClick();
+            }
+        }
+    }
+
+    void OnLeftClick()
     {
         if (isRevealedClue) return;
 
-        if (flag)
+        if (currentState == TileState.Revealed)
         {
-            if (currentState == TileState.Flagged)
-            {
-                currentState = TileState.Hidden;
-                img.color = Color.white;
-            }
-            else
-            {
-                currentState = TileState.Flagged;
-                img.color = Color.red;
-            }
+            currentState = TileState.Hidden;
+            img.color = Color.white;
         }
         else
         {
             currentState = TileState.Revealed;
             img.color = isSolution ? Color.green : Color.gray;
+        }
+
+        puzzle.CheckForWin();
+    }
+
+    void OnRightClick()
+    {
+        if (isRevealedClue) return;
+
+        if (currentState == TileState.Flagged)
+        {
+            currentState = TileState.Hidden;
+            img.color = Color.white;
+        }
+        else
+        {
+            currentState = TileState.Flagged;
+            img.color = Color.red;
         }
 
         puzzle.CheckForWin();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -21,6 +22,9 @@ public class NumberPuzzleSolvable : MonoBehaviour
     public GameObject winPanel;
     public Button redoButton;
 
+    [Header("Win Panel Settings")]
+    public float winDisplayTime = 2f;
+
     private Tile[,] tiles;
 
     public Action OnPuzzleOpened;
@@ -31,7 +35,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     private void Awake()
     {
-        gameObject.SetActive(false); // inactive by default
+        gameObject.SetActive(false); // puzzle hidden by default
         if (redoButton != null)
             redoButton.onClick.AddListener(ResetPuzzle);
     }
@@ -63,6 +67,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
             Destroy(child.gameObject);
 
         winPanel.SetActive(false);
+
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
@@ -201,7 +206,23 @@ public class NumberPuzzleSolvable : MonoBehaviour
     void Win()
     {
         winPanel.SetActive(true);
+        StartCoroutine(HideWinPanelAndClosePuzzle());
         successCallback?.Invoke();
+    }
+
+    private IEnumerator HideWinPanelAndClosePuzzle()
+    {
+        // Keep puzzle active while win panel is visible
+        yield return new WaitForSeconds(winDisplayTime);
+
+        // Hide win panel
+        winPanel.SetActive(false);
+
+        // Hide entire puzzle
+        gameObject.SetActive(false);
+
+        // Trigger puzzle closed callback
+        OnPuzzleClosed?.Invoke();
     }
 }
 

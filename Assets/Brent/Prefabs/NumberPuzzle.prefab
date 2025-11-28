@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 891018250645926979}
   - component: {fileID: 6388902862313763915}
   - component: {fileID: 5534562430843011843}
+  - component: {fileID: 7388312462336531206}
   m_Layer: 0
   m_Name: WinPanel
   m_TagString: Untagged
@@ -212,6 +213,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &7388312462336531206
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4943352370881143600}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 1
 --- !u!1 &5336700402246203890
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,4 +739,5 @@ MonoBehaviour:
   tilePrefab: {fileID: 2704072608132217256, guid: f3a99f676e393ce4a82ef5ccb47286b6, type: 3}
   gridParent: {fileID: 7836519627670502911}
   winPanel: {fileID: 4943352370881143600}
-  redoButton: {fileID: 5336700402246203890}
+  redoButton: {fileID: 8488487997936868008}
+  winPanelDisplayTime: 2

@@ -6,30 +6,24 @@ public class PuzzleInteractable : Interactable
     public NumberPuzzleSolvable puzzle;
     public Item rewardItem; // optional
 
-    private HeroNavAgent2D hero;
-
-    private void Awake()
-    {
-        if (puzzle != null)
-        {
-            // Register callbacks once
-            puzzle.OnPuzzleOpened += () => { gameObject.SetActive(false); };
-            puzzle.OnPuzzleClosed += () =>
-            {
-                gameObject.SetActive(true);
-                if (hero != null)
-                    hero.agent.isStopped = false;
-            };
-        }
-    }
-
     public override void Interact(GameObject player)
     {
         if (puzzle == null || player == null) return;
 
-        hero = player.GetComponent<HeroNavAgent2D>();
+        HeroNavAgent2D hero = player.GetComponent<HeroNavAgent2D>();
         if (hero != null)
             hero.agent.isStopped = true;
+
+        // Puzzle events
+        puzzle.OnPuzzleOpened += () => { gameObject.SetActive(false); };
+        puzzle.OnPuzzleClosed += () =>
+        {
+            gameObject.SetActive(true);
+
+            // Re-enable movement only after puzzle is fully hidden
+            if (hero != null)
+                hero.agent.isStopped = false;
+        };
 
         puzzle.OpenPuzzle(
             success: () =>
@@ -41,13 +35,11 @@ public class PuzzleInteractable : Interactable
                         inv.AddItem(rewardItem, 1);
                 }
 
-                if (hero != null)
-                    hero.agent.isStopped = false;
+                // hero movement will be re-enabled in OnPuzzleClosed
             },
             fail: () =>
             {
-                if (hero != null)
-                    hero.agent.isStopped = false;
+                // hero movement will be re-enabled in OnPuzzleClosed
             }
         );
     }
