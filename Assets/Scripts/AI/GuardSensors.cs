@@ -1,13 +1,16 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-/// Handles vision + hearing for a guard and exposes positions,
 [DisallowMultipleComponent]
 public class GuardSensors : MonoBehaviour
 {
     public GuardProfile profile;
-    public Transform target;        // usually the hero
+    public Transform target;
 
-    // Read-only signals for the AI
+    [Header("FOV Axis")]
+    [Tooltip("Enable if your sprite art faces Up (↑). If it faces Right (→), leave off.")]
+    public bool forwardIsUp = true;
+
+    // Signals
     public bool targetVisible { get; private set; }
     public Vector2 lastSeenPos { get; private set; }
     public Vector2 lastHeardPos { get; private set; }
@@ -20,11 +23,9 @@ public class GuardSensors : MonoBehaviour
 
     void Update()
     {
-        // Vision chech every frame
         targetVisible = CheckVision();
-        if (targetVisible) lastSeenPos = target.position;
+        if (targetVisible && target) lastSeenPos = target.position;
 
-        // Small grace window for hearing so AI has time to react
         if (heardRecently)
         {
             heardTimer -= Time.deltaTime;
@@ -32,7 +33,6 @@ public class GuardSensors : MonoBehaviour
         }
     }
 
-    // Cone + LOS raycast on XY (uses Physics2D)
     bool CheckVision()
     {
         if (!profile || !target) return false;
@@ -40,21 +40,23 @@ public class GuardSensors : MonoBehaviour
         Vector2 origin = transform.position;
         Vector2 toTgt = (Vector2)target.position - origin;
 
-        // Range and cone angle 
+        // choose the sprite's "forward"
+        Vector2 forward = forwardIsUp ? (Vector2)transform.up : (Vector2)transform.right;
+
+        // range + cone
         if (toTgt.magnitude > profile.visionRange) return false;
-        if (Vector2.Angle(transform.right, toTgt) > profile.fov * 0.5f) return false;
+        if (Vector2.Angle(forward, toTgt) > profile.fov * 0.5f) return false;
 
-        // First hit must be the target for valid line of sight
+        // LOS: raycast against LOS mask (typically Walls)
         var hit = Physics2D.Raycast(origin, toTgt.normalized, toTgt.magnitude, profile.losMask);
-        if (!hit) return false;
-
-        return (hit.transform == target || hit.transform.root == target);
+        // If nothing blocked OR the first thing hit is the target (when target layer is included), we see them
+        if (!hit) return true;
+        return hit.transform == target || hit.transform.root == target;
     }
 
     void OnNoiseHeard(Vector2 pos, float loudness)
     {
         if (!profile) return;
-
         float maxDist = profile.hearingRadius * Mathf.Max(0.01f, loudness);
         if (Vector2.Distance(transform.position, pos) <= maxDist)
         {
@@ -62,22 +64,5 @@ public class GuardSensors : MonoBehaviour
             heardTimer = 1.2f;
             lastHeardPos = pos;
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (!profile) return;
-
-        Gizmos.color = profile.gizmoColor;
-        Gizmos.DrawWireSphere(transform.position, profile.visionRange);
-        Gizmos.DrawWireSphere(transform.position, profile.hearingRadius);
-
-        // FOV fan (assumes +X is forward)
-        Vector3 p = transform.position;
-        float a = profile.fov * 0.5f;
-        Vector3 left = Quaternion.Euler(0, 0, a) * transform.right;
-        Vector3 right = Quaternion.Euler(0, 0, -a) * transform.right;
-        Gizmos.DrawRay(p, left * profile.visionRange);
-        Gizmos.DrawRay(p, right * profile.visionRange);
     }
 }
