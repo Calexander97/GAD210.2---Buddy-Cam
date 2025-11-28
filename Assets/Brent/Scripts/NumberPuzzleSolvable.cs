@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,55 +9,74 @@ public class NumberPuzzleSolvable : MonoBehaviour
     [Header("Grid Settings")]
     public int width = 4;
     public int height = 4;
-    [Range(1, 100)] public int solutionPercent = 30;
 
     [Header("Puzzle Settings")]
-    [Range(1, 8)] public int minCluesPerSolution = 2;
-    [Range(0, 16)] public int extraClues = 4;
-
-    [Header("References")]
     public Tile tilePrefab;
     public Transform gridParent;
+
     public GameObject winPanel;
     public Button redoButton;
 
-    [Header("Win Panel Settings")]
-    public float winDisplayTime = 2f;
+    [Header("Terminal")]
+    public GameObject terminalPanel;
+
+    [Header("Puzzle Generation")]
+    [Range(1, 100)] public int solutionPercent = 30;
+    [Range(1, 8)] public int minCluesPerSolution = 2;
+    [Range(0, 16)] public int extraClues = 4;
 
     private Tile[,] tiles;
-
-    public Action OnPuzzleOpened;
-    public Action OnPuzzleClosed;
-
     private Action successCallback;
-    private Action failCallback;
 
     private void Awake()
     {
-        gameObject.SetActive(false); // puzzle hidden by default
+        gameObject.SetActive(false);
         if (redoButton != null)
             redoButton.onClick.AddListener(ResetPuzzle);
     }
 
-    public void OpenPuzzle(Action success = null, Action fail = null)
+    public void OpenPuzzle(Action success = null)
     {
         successCallback = success;
-        failCallback = fail;
 
         gameObject.SetActive(true);
         winPanel.SetActive(false);
-
-        OnPuzzleOpened?.Invoke();
 
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
     }
 
-    public void ClosePuzzle()
+    public void CheckForWin()
     {
-        gameObject.SetActive(false);
-        OnPuzzleClosed?.Invoke();
+        foreach (Tile t in tiles)
+        {
+            if (t.isRevealedClue) continue;
+            if (t.isSolution != t.GetPlayerState()) return;
+        }
+
+        Win();
+    }
+
+    private void Win()
+    {
+        winPanel.SetActive(true);
+        StartCoroutine(WinSequence());
+    }
+
+    private IEnumerator WinSequence()
+    {
+        yield return new WaitForSeconds(2f);
+
+        // hide puzzle UI
+        foreach (Transform child in transform)
+            child.gameObject.SetActive(false);
+
+        // show terminal panel
+        if (terminalPanel != null)
+            terminalPanel.SetActive(true);
+
+        successCallback?.Invoke();
     }
 
     private void ResetPuzzle()
@@ -67,7 +85,6 @@ public class NumberPuzzleSolvable : MonoBehaviour
             Destroy(child.gameObject);
 
         winPanel.SetActive(false);
-
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
@@ -78,22 +95,20 @@ public class NumberPuzzleSolvable : MonoBehaviour
         tiles = new Tile[width, height];
 
         for (int y = 0; y < height; y++)
-        {
             for (int x = 0; x < width; x++)
             {
                 Tile t = Instantiate(tilePrefab, gridParent);
                 t.Init(x, y, this);
                 tiles[x, y] = t;
             }
-        }
     }
 
     void GenerateSolution()
     {
         int totalTiles = width * height;
         int solutionCount = Mathf.CeilToInt(totalTiles * solutionPercent / 100f);
-
         HashSet<Vector2Int> chosen = new HashSet<Vector2Int>();
+
         while (chosen.Count < solutionCount)
         {
             int x = UnityEngine.Random.Range(0, width);
@@ -115,8 +130,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 if (tiles[x, y].isSolution)
                     coverage[new Vector2Int(x, y)] = 0;
 
-        int attempts = 0;
-        int maxAttempts = 200;
+        int attempts = 0, maxAttempts = 200;
 
         while (coverage.Count > 0 && attempts < maxAttempts)
         {
@@ -190,39 +204,6 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 neighbors.Add(new Vector2Int(x, y));
             }
         return neighbors;
-    }
-
-    public void CheckForWin()
-    {
-        foreach (Tile t in tiles)
-        {
-            if (t.isRevealedClue) continue;
-            if (t.isSolution != t.GetPlayerState()) return;
-        }
-
-        Win();
-    }
-
-    void Win()
-    {
-        winPanel.SetActive(true);
-        StartCoroutine(HideWinPanelAndClosePuzzle());
-        successCallback?.Invoke();
-    }
-
-    private IEnumerator HideWinPanelAndClosePuzzle()
-    {
-        // Keep puzzle active while win panel is visible
-        yield return new WaitForSeconds(winDisplayTime);
-
-        // Hide win panel
-        winPanel.SetActive(false);
-
-        // Hide entire puzzle
-        gameObject.SetActive(false);
-
-        // Trigger puzzle closed callback
-        OnPuzzleClosed?.Invoke();
     }
 }
 

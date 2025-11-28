@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IPointerClickHandler
 {
     public int x, y;
     public bool isSolution = false;
@@ -25,10 +26,6 @@ public class Tile : MonoBehaviour
         numberText = GetComponentInChildren<TMP_Text>();
         currentState = TileState.Hidden;
         img.color = Color.white;
-
-        Button btn = GetComponent<Button>();
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(OnLeftClick); // left click = normal button click
     }
 
     public void SetClue(int number)
@@ -37,55 +34,37 @@ public class Tile : MonoBehaviour
             numberText.text = number.ToString();
     }
 
-    void Update()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (isRevealedClue) return; // clues cannot be toggled
+        if (isRevealedClue) return;
 
-        // detect right click
-        if (Input.GetMouseButtonDown(1))
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // check if mouse is over this tile
-            if (RectTransformUtility.RectangleContainsScreenPoint(
-                img.rectTransform,
-                Input.mousePosition,
-                null))
+            // left-click: toggle on/off
+            if (currentState == TileState.Revealed)
             {
-                OnRightClick();
+                currentState = TileState.Hidden;
+                img.color = Color.white;
+            }
+            else
+            {
+                currentState = TileState.Revealed;
+                img.color = isSolution ? Color.green : Color.gray;
             }
         }
-    }
-
-    void OnLeftClick()
-    {
-        if (isRevealedClue) return;
-
-        if (currentState == TileState.Revealed)
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            currentState = TileState.Hidden;
-            img.color = Color.white;
-        }
-        else
-        {
-            currentState = TileState.Revealed;
-            img.color = isSolution ? Color.green : Color.gray;
-        }
-
-        puzzle.CheckForWin();
-    }
-
-    void OnRightClick()
-    {
-        if (isRevealedClue) return;
-
-        if (currentState == TileState.Flagged)
-        {
-            currentState = TileState.Hidden;
-            img.color = Color.white;
-        }
-        else
-        {
-            currentState = TileState.Flagged;
-            img.color = Color.red;
+            // right-click: toggle flagged
+            if (currentState == TileState.Flagged)
+            {
+                currentState = TileState.Hidden;
+                img.color = Color.white;
+            }
+            else
+            {
+                currentState = TileState.Flagged;
+                img.color = Color.red;
+            }
         }
 
         puzzle.CheckForWin();
