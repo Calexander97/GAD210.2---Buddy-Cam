@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,19 +12,23 @@ public class Tile : MonoBehaviour
     public TileState currentState = TileState.Hidden;
 
     private Image img;
-    private TMP_Text numberText; // or TMP_Text if using TextMeshPro
+    private TMP_Text numberText;
+    private NumberPuzzleSolvable puzzle;
 
-    public void Init(int x, int y)
+    public void Init(int x, int y, NumberPuzzleSolvable puzzle)
     {
         this.x = x;
         this.y = y;
+        this.puzzle = puzzle;
+
         img = GetComponent<Image>();
         numberText = GetComponentInChildren<TMP_Text>();
         currentState = TileState.Hidden;
         img.color = Color.white;
 
-        // Do NOT try to set clue here; set it after generating clues
-        numberText.text = "";
+        Button btn = GetComponent<Button>();
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => OnClick(false));
     }
 
     public void SetClue(int number)
@@ -57,11 +60,8 @@ public class Tile : MonoBehaviour
             img.color = isSolution ? Color.green : Color.gray;
         }
 
-        FindAnyObjectByType<NumberPuzzleSolvable>().CheckForWin();
+        puzzle.CheckForWin();
     }
 
-    public bool GetPlayerState()
-    {
-        return currentState == TileState.Revealed;
-    }
+    public bool GetPlayerState() => currentState == TileState.Revealed;
 }

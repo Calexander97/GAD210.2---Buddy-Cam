@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems
 
 public class NumberPuzzle : MonoBehaviour
 {
@@ -27,13 +28,26 @@ public class NumberPuzzle : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 Tile t = Instantiate(tilePrefab, gridParent);
-                t.Init(x, y);
-
+                t.Init(x, y, this); // pass the NumberPuzzleSolvable reference
                 tiles[x, y] = t;
 
-                // hook up button click
+                // Left-click
                 var btn = t.GetComponent<Button>();
-                btn.onClick.AddListener(() => t.OnClick(false));
+                btn.onClick.AddListener(() => t.OnClick());
+
+                // Right-click for flag
+                EventTrigger trigger = t.gameObject.AddComponent<EventTrigger>();
+                EventTrigger.Entry entry = new EventTrigger.Entry
+                {
+                    eventID = EventTriggerType.PointerClick
+                };
+                entry.callback.AddListener((data) =>
+                {
+                    PointerEventData ped = (PointerEventData)data;
+                    if (ped.button == PointerEventData.InputButton.Right)
+                        t.OnClick(flag: true);
+                });
+                trigger.triggers.Add(entry);
             }
         }
     }

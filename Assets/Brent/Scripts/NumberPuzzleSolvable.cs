@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class NumberPuzzleSolvable : MonoBehaviour
@@ -18,15 +18,51 @@ public class NumberPuzzleSolvable : MonoBehaviour
     [Header("References")]
     public Tile tilePrefab;
     public Transform gridParent;
-
-    [Header("UI")]
     public GameObject winPanel;
-    public TMP_Text winText;
+    public Button redoButton;
 
     private Tile[,] tiles;
 
-    void Start()
+    public Action OnPuzzleOpened;
+    public Action OnPuzzleClosed;
+
+    private Action successCallback;
+    private Action failCallback;
+
+    private void Awake()
     {
+        gameObject.SetActive(false); // inactive by default
+        if (redoButton != null)
+            redoButton.onClick.AddListener(ResetPuzzle);
+    }
+
+    public void OpenPuzzle(Action success = null, Action fail = null)
+    {
+        successCallback = success;
+        failCallback = fail;
+
+        gameObject.SetActive(true);
+        winPanel.SetActive(false);
+
+        OnPuzzleOpened?.Invoke();
+
+        GenerateGrid();
+        GenerateSolution();
+        PlaceCluesWithSettings();
+    }
+
+    public void ClosePuzzle()
+    {
+        gameObject.SetActive(false);
+        OnPuzzleClosed?.Invoke();
+    }
+
+    private void ResetPuzzle()
+    {
+        foreach (Transform child in gridParent)
+            Destroy(child.gameObject);
+
+        winPanel.SetActive(false);
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
@@ -41,26 +77,8 @@ public class NumberPuzzleSolvable : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 Tile t = Instantiate(tilePrefab, gridParent);
-                t.Init(x, y);
+                t.Init(x, y, this);
                 tiles[x, y] = t;
-
-                // Left-click = reveal
-                var btn = t.GetComponent<Button>();
-                btn.onClick.AddListener(() => t.OnClick(false));
-
-                // Right-click = flag
-                EventTrigger trigger = t.gameObject.AddComponent<EventTrigger>();
-                EventTrigger.Entry entry = new EventTrigger.Entry
-                {
-                    eventID = EventTriggerType.PointerClick
-                };
-                entry.callback.AddListener((data) =>
-                {
-                    PointerEventData ped = (PointerEventData)data;
-                    if (ped.button == PointerEventData.InputButton.Right)
-                        t.OnClick(true);
-                });
-                trigger.triggers.Add(entry);
             }
         }
     }
@@ -73,8 +91,8 @@ public class NumberPuzzleSolvable : MonoBehaviour
         HashSet<Vector2Int> chosen = new HashSet<Vector2Int>();
         while (chosen.Count < solutionCount)
         {
-            int x = Random.Range(0, width);
-            int y = Random.Range(0, height);
+            int x = UnityEngine.Random.Range(0, width);
+            int y = UnityEngine.Random.Range(0, height);
             Vector2Int pos = new Vector2Int(x, y);
             if (!chosen.Contains(pos))
             {
@@ -103,7 +121,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 if (kvp.Value < minCluesPerSolution) uncovered.Add(kvp.Key);
             if (uncovered.Count == 0) break;
 
-            Vector2Int solTile = uncovered[Random.Range(0, uncovered.Count)];
+            Vector2Int solTile = uncovered[UnityEngine.Random.Range(0, uncovered.Count)];
             List<Vector2Int> neighbors = GetNeighbors(solTile.x, solTile.y);
             neighbors.Shuffle();
 
@@ -112,9 +130,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 Tile t = tiles[n.x, n.y];
                 if (t.isSolution || t.isRevealedClue) continue;
 
-                // Assign as clue
                 t.isRevealedClue = true;
-                t.SetClue(CountAdjacentSolutionTiles(n.x, n.y));
 
                 foreach (var nb in GetNeighbors(n.x, n.y))
                     if (coverage.ContainsKey(nb))
@@ -131,18 +147,22 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 coverage.Remove(d);
         }
 
-        // Extra random clues
         for (int i = 0; i < extraClues; i++)
         {
-            int x = Random.Range(0, width);
-            int y = Random.Range(0, height);
+            int x = UnityEngine.Random.Range(0, width);
+            int y = UnityEngine.Random.Range(0, height);
             Tile t = tiles[x, y];
             if (!t.isSolution && !t.isRevealedClue)
-            {
                 t.isRevealedClue = true;
-                t.SetClue(CountAdjacentSolutionTiles(x, y));
-            }
         }
+
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                Tile t = tiles[x, y];
+                if (t.isRevealedClue)
+                    t.SetClue(CountAdjacentSolutionTiles(x, y));
+            }
     }
 
     int CountAdjacentSolutionTiles(int cx, int cy)
@@ -174,23 +194,14 @@ public class NumberPuzzleSolvable : MonoBehaviour
             if (t.isRevealedClue) continue;
             if (t.isSolution != t.GetPlayerState()) return;
         }
-        Debug.Log("Puzzle solved!");
-        OnPuzzleSolved();
+
+        Win();
     }
 
-    private void OnPuzzleSolved()
+    void Win()
     {
-        // Show the win panel
-        if (winPanel != null)
-        {
-            winPanel.SetActive(true);
-            if (winText != null)
-                winText.text = "Puzzle Solved!";
-        }
-
-        // Hide the puzzle grid
-        if (gridParent != null)
-            gridParent.gameObject.SetActive(false);
+        winPanel.SetActive(true);
+        successCallback?.Invoke();
     }
 }
 
@@ -201,7 +212,7 @@ public static class ListExtensions
         for (int i = 0; i < list.Count; i++)
         {
             T temp = list[i];
-            int randomIndex = Random.Range(i, list.Count);
+            int randomIndex = UnityEngine.Random.Range(i, list.Count);
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
         }
