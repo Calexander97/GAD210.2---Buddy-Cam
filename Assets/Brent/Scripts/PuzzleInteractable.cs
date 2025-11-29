@@ -12,6 +12,19 @@ public class PuzzleInteractable : Interactable
         HeroNavAgent2D hero = player.GetComponent<HeroNavAgent2D>();
         if (hero != null) hero.agent.isStopped = true;
 
+        if (puzzle.puzzleCompleted) // check if puzzle was already solved
+        {
+            // Puzzle completed — just show terminal
+            if (puzzle.terminalPanel != null)
+                puzzle.terminalPanel.SetActive(true);
+
+            if (hero != null)
+                hero.agent.isStopped = false;
+
+            return;
+        }
+
+        // Puzzle not yet solved — open normally
         puzzle.OpenPuzzle(success: () =>
         {
             if (rewardItem != null)

@@ -45,7 +45,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
                 currentState = TileState.Hidden;
                 img.color = Color.white;
 
-                // Left-click removed - increase remaining nodes if it was previously revealed
+                // Left-click removed green - increase remaining nodes if it was previously revealed
                 puzzle.IncreaseRemainingNodes();
             }
             else
@@ -59,7 +59,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         }
         else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            // right-click: toggle flagged
+            // right-click - toggle flagged
             if (currentState == TileState.Flagged)
             {
                 currentState = TileState.Hidden;

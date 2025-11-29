@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +32,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
     private Tile[,] tiles;
     private Action successCallback;
     private int remainingNodes;
+    public bool puzzleCompleted { get; private set; } = false;
 
     private void Awake()
     {
@@ -90,9 +92,11 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     private void Win()
     {
+        puzzleCompleted = true;   // mark as completed
         winPanel.SetActive(true);
         StartCoroutine(WinSequence());
     }
+
 
     private IEnumerator WinSequence()
     {
@@ -111,15 +115,31 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     private void ResetPuzzle()
     {
+        // destroy old tiles
         foreach (Transform child in gridParent)
             Destroy(child.gameObject);
 
         winPanel.SetActive(false);
+
+        // generate new puzzle
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
+
+        // reset the remaining nodes counter
+        CountInitialSolutions();
+        UpdateRemainingUI();
     }
 
+    private void CountInitialSolutions()
+    {
+        remainingNodes = 0;
+        foreach (Tile t in tiles)
+            if (t.isSolution)
+                remainingNodes++;
+
+        UpdateRemainingUI();
+    }
     void GenerateGrid()
     {
         tiles = new Tile[width, height];
@@ -150,6 +170,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 tiles[x, y].isSolution = true;
             }
         }
+        Debug.Log("Solution tiles: " + tiles.Cast<Tile>().Count(t => t.isSolution));
     }
 
     void PlaceCluesWithSettings()
@@ -171,7 +192,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
             if (uncovered.Count == 0) break;
 
             Vector2Int solTile = uncovered[UnityEngine.Random.Range(0, uncovered.Count)];
-            List<Vector2Int> neighbors = GetNeighbors(solTile.x, solTile.y);
+            List<Vector2Int> neighbors = GetNeighbours(solTile.x, solTile.y);
             neighbors.Shuffle();
 
             foreach (var n in neighbors)
@@ -181,7 +202,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
                 t.isRevealedClue = true;
 
-                foreach (var nb in GetNeighbors(n.x, n.y))
+                foreach (var nb in GetNeighbours(n.x, n.y))
                     if (coverage.ContainsKey(nb))
                         coverage[nb]++;
 
@@ -217,13 +238,13 @@ public class NumberPuzzleSolvable : MonoBehaviour
     int CountAdjacentSolutionTiles(int cx, int cy)
     {
         int count = 0;
-        foreach (var n in GetNeighbors(cx, cy))
+        foreach (var n in GetNeighbours(cx, cy))
             if (tiles[n.x, n.y].isSolution)
                 count++;
         return count;
     }
 
-    List<Vector2Int> GetNeighbors(int cx, int cy)
+    List<Vector2Int> GetNeighbours(int cx, int cy)
     {
         List<Vector2Int> neighbors = new List<Vector2Int>();
         for (int y = cy - 1; y <= cy + 1; y++)
