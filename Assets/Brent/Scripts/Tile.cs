@@ -40,16 +40,21 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // left-click: toggle on/off
             if (currentState == TileState.Revealed)
             {
                 currentState = TileState.Hidden;
                 img.color = Color.white;
+
+                // Left-click removed - increase remaining nodes if it was previously revealed
+                puzzle.IncreaseRemainingNodes();
             }
             else
             {
                 currentState = TileState.Revealed;
-                img.color = isSolution ? Color.green : Color.gray;
+                img.color = Color.green;
+
+                // Left-click added - decrease remaining nodes
+                puzzle.DecreaseRemainingNodes();
             }
         }
         else if (eventData.button == PointerEventData.InputButton.Right)

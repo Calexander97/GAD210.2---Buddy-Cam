@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +15,10 @@ public class NumberPuzzleSolvable : MonoBehaviour
     public Tile tilePrefab;
     public Transform gridParent;
 
+    [Header("References")]
     public GameObject winPanel;
     public Button redoButton;
+    public TMP_Text remainingText;
 
     [Header("Terminal")]
     public GameObject terminalPanel;
@@ -27,6 +30,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     private Tile[,] tiles;
     private Action successCallback;
+    private int remainingNodes;
 
     private void Awake()
     {
@@ -45,6 +49,32 @@ public class NumberPuzzleSolvable : MonoBehaviour
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
+
+        // Initialize remaining nodes counter
+        remainingNodes = 0;
+        foreach (Tile t in tiles)
+            if (t.isSolution)
+                remainingNodes++;
+
+        UpdateRemainingUI();
+    }
+
+    private void UpdateRemainingUI()
+    {
+        if (remainingText != null)
+            remainingText.text = "Nodes Remaining: " + remainingNodes;
+    }
+
+    public void DecreaseRemainingNodes()
+    {
+        remainingNodes--;
+        UpdateRemainingUI();
+    }
+
+    public void IncreaseRemainingNodes()
+    {
+        remainingNodes++;
+        UpdateRemainingUI();
     }
 
     public void CheckForWin()
