@@ -1,31 +1,60 @@
 using UnityEngine;
 
-/// Drop this on a trigger collider 2D. Tag = "Entry" or "Exit".
+/// Put this on a 2D trigger.
+/// Set ZoneType = Entry for the start zone (optional).
+/// Set ZoneType = Exit for the extraction zone (uses ObjectiveManager conditions).
+[RequireComponent(typeof(Collider2D))]
 public class ZoneTrigger : MonoBehaviour
 {
     public enum ZoneType { Entry, Exit }
-    public ZoneType type;
+    [Header("Zone")]
+    public ZoneType type = ZoneType.Entry;
 
-    void OnTriggerEnter2D(Collider2D c)
+    [Header("Who can trigger")]
+    public string playerTag = "Player";
+
+    [Header("Exit requirements (used only when ZoneType = Exit)")]
+    public bool requireData = true;        // must have downloaded data
+    public bool requireAltExit = false;    // alt exit must be unlocked
+
+    void Reset()
     {
-        if (!c.CompareTag("Hero")) return;
+        var c = GetComponent<Collider2D>();
+        if (c) c.isTrigger = true;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag(playerTag)) return;
 
         var om = ObjectiveManager.I;
         if (!om) return;
 
         if (type == ZoneType.Entry)
         {
-            om.entryReached = true;
-            // e.g., enable exit when primaries complete, or immediately:
-            // om.exitEnabled = true;
+            // Optional: if your ObjectiveManager has a Start/Begin call, use it.
+            // om.StartMission(); // only if you implemented it.
+            Debug.Log("[ZoneTrigger] Entry reached.");
+            return;
         }
-        else if (type == ZoneType.Exit)
+
+        // Exit logic
+        if (type == ZoneType.Exit)
         {
-            if (om.exitEnabled && om.AllPrimariesComplete())
+            if (requireData && !om.HasData)
             {
-                Debug.Log("Mission Complete!");
-                // trigger next scene / summary
+                Debug.Log("[ZoneTrigger] Exit blocked: data not acquired yet.");
+                return;
             }
+
+            if (requireAltExit && !om.AltExitUnlocked)
+            {
+                Debug.Log("[ZoneTrigger] Exit blocked: alternate exit locked.");
+                return;
+            }
+
+            Debug.Log("[ZoneTrigger] Mission Complete!");
+            om.CompleteMission();
         }
     }
 }
