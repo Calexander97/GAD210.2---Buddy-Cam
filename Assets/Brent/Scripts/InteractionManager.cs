@@ -30,10 +30,8 @@ public class InteractionManager : MonoBehaviour
     {
         if (buttonImage == null) return;
 
-        if (CurrentInteractable != null)
-            buttonImage.color = highlightColor;
-        else
-            buttonImage.color = normalColor;
+        // highlight interact button if player in range
+        buttonImage.color = CurrentInteractable != null ? highlightColor : normalColor;
     }
 
     public void SetCurrentInteractable(Interactable interactable)

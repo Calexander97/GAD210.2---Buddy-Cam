@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/Develop - Brent/NavMesh-NavMeshSurface2D.asset.meta
+guid: 486f65057d370334f80763eee173d868
+========
 guid: 43fd8ea9a414cfb4f9d60b43f08a08cd
+>>>>>>>> aee7db1cde6e34aff9cc93190dd1d480ba0e6593:Assets/Scenes/Develop-Christian/NavMesh-NavMeshSurface2D.asset.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 23800000
