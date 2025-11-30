@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
     [Header("References")]
     public Transform throwOrigin;
     public PlayerInventoryUI ui;
+    public SpecialUIPanelManager uiPanelManager;
 
     private bool isUsingItem = false;
 
@@ -82,14 +83,54 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        string itemName = slot.item.itemName;
-        DropItem(slot.item, throwOrigin.position);
-        slot.count--;
-        if (slot.count <= 0) slot.Clear();
+        Item item = slot.item;
 
-        Debug.Log($"Used 1 {itemName}");
-        ui?.UpdateUI();
+        // ----- SPECIAL UI ITEMS -----
+        if (item.type == Item.ItemType.SpecialUI)
+        {
+            GameObject panel = uiPanelManager.GetPanelForItem(item.itemName);
 
+            if (panel != null)
+            {
+                panel.SetActive(true);
+                Debug.Log("Opened special UI for item: " + item.itemName);
+            }
+            else
+            {
+                Debug.LogWarning("No panel assigned for SpecialUI item: " + item.itemName);
+            }
+
+            // Do NOT remove item
+            ui?.UpdateUI();
+            isUsingItem = false;
+            return;
+        }
+
+        // --- THROWABLE ITEM ---
+        if (item.type == Item.ItemType.Throwable)
+        {
+            DropItem(item, throwOrigin.position);
+            slot.count--;
+            if (slot.count <= 0) slot.Clear();
+
+            ui?.UpdateUI();
+            isUsingItem = false;
+            return;
+        }
+
+        // --- CONSUMABLE ITEM ---
+        if (item.type == Item.ItemType.Consumable)
+        {
+            slot.count--;
+            if (slot.count <= 0) slot.Clear();
+
+            ui?.UpdateUI();
+            isUsingItem = false;
+            return;
+        }
+
+        // --- DEFAULT ---
+        Debug.Log("Used item: " + item.itemName);
         isUsingItem = false;
     }
 
@@ -106,6 +147,8 @@ public class Inventory : MonoBehaviour
         Destroy(spawned, item.lifetime);
     }
 }
+
+
 
 [System.Serializable]
 public class InventorySlot

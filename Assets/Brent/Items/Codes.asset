@@ -15,7 +15,8 @@ MonoBehaviour:
   itemName: Codes
   icon: {fileID: -5621963177244471619, guid: 3a7cb83c6d843d9498bcc43b104fc53e, type: 3}
   maxStack: 1
-  type: 2
+  type: 4
   throwablePrefab: {fileID: 0}
   throwForce: 10
   lifetime: 2
+  uiPanel: {fileID: 0}
