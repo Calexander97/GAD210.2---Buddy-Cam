@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 3335074870828597611, guid: ce39075cb97dd1643837d58499b97357, type: 3}
       propertyPath: playerInventory
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1700786574}
     - target: {fileID: 5506938804540249799, guid: ce39075cb97dd1643837d58499b97357, type: 3}
       propertyPath: m_Name
       value: CodesPanel
@@ -257,6 +257,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -278,6 +280,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -878,6 +881,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -899,6 +904,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -2779,6 +2785,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2800,6 +2808,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -3415,6 +3424,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3436,6 +3447,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -4358,6 +4370,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4379,6 +4393,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -5922,7 +5937,7 @@ PrefabInstance:
     - target: {fileID: 2416857385982245108, guid: 932d0941c614ddb45826d57ad52d76aa, type: 3}
       propertyPath: rewardItem
       value: 
-      objectReference: {fileID: 11400000, guid: bbace95946bc8cb49a068491ef63aee7, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 2416857385982245108, guid: 932d0941c614ddb45826d57ad52d76aa, type: 3}
       propertyPath: interactionManager
       value: 
@@ -6520,7 +6535,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -6528,6 +6542,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!81 &1084030386
 AudioListener:
   m_ObjectHideFlags: 0
@@ -6925,6 +6940,10 @@ PrefabInstance:
       propertyPath: ui
       value: 
       objectReference: {fileID: 938813104}
+    - target: {fileID: 7643645863367135204, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
+      propertyPath: uiPanelManager
+      value: 
+      objectReference: {fileID: 1628495716}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7868,7 +7887,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -7876,6 +7894,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!81 &1336227021
 AudioListener:
   m_ObjectHideFlags: 0
@@ -8431,6 +8450,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -8452,6 +8473,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -8536,7 +8558,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -8544,6 +8565,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!81 &1444408313
 AudioListener:
   m_ObjectHideFlags: 0
@@ -10283,6 +10305,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6908649777078462675, guid: 652044f5eedb82c42b48487572d13155, type: 3}
   m_PrefabInstance: {fileID: 1623437192}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1628495716 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1746691402093887253, guid: 13895e9c964ff9d4b84f3a70e247681a, type: 3}
+  m_PrefabInstance: {fileID: 168845803}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1cfbb18ca8ccc44098efbede89558db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpecialUIPanelManager
 --- !u!4 &1633568023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2380506974825927717, guid: 3d6258ad681131d4cac07ef9be1b906f, type: 3}
@@ -10401,6 +10434,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -10422,6 +10457,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
   m_SortingOrder: 0
@@ -11510,7 +11546,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -11518,6 +11553,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!81 &1893021868
 AudioListener:
   m_ObjectHideFlags: 0
