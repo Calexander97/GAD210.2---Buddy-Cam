@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 5633332351855184833}
   - component: {fileID: 2741776740558518847}
   - component: {fileID: 7643645863367135204}
-  - component: {fileID: 8797245108489886867}
   - component: {fileID: 759582991170204910}
+  - component: {fileID: 3285981530618024916}
+  - component: {fileID: 1327733380190920387}
   m_Layer: 7
   m_Name: Hero
   m_TagString: Player
@@ -31,13 +32,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14489613970032785}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.16, y: 4.75, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9193879141863728326}
-  - {fileID: 603798533261256284}
+  - {fileID: 1220713265061683108}
+  - {fileID: 5770648023452568153}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5971316074431450909
@@ -199,7 +200,28 @@ MonoBehaviour:
   slots: []
   throwOrigin: {fileID: 999377685217698036}
   ui: {fileID: 0}
---- !u!50 &8797245108489886867
+  uiPanelManager: {fileID: 0}
+--- !u!114 &759582991170204910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14489613970032785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feda65aa80edd1c418c21ab2e5500af6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroHealth
+  maxHearts: 3
+  iFrames: 0.3
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!50 &3285981530618024916
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -226,7 +248,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &759582991170204910
+--- !u!114 &1327733380190920387
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,7 +268,7 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &8228155754871315844
+--- !u!1 &3898480468766142668
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,47 +276,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 603798533261256284}
-  - component: {fileID: 5940488539041391085}
-  m_Layer: 0
-  m_Name: InteractionManager
+  - component: {fileID: 5770648023452568153}
+  - component: {fileID: 9094094433844819310}
+  m_Layer: 7
+  m_Name: Interaction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &603798533261256284
+--- !u!4 &5770648023452568153
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8228155754871315844}
+  m_GameObject: {fileID: 3898480468766142668}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.9105023, y: -0.1512258, z: -0.017807895}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 999377685217698036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5940488539041391085
+--- !u!114 &9094094433844819310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8228155754871315844}
+  m_GameObject: {fileID: 3898480468766142668}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ff038d43a50cdf4c96d886a022c7878, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionManager
   player: {fileID: 14489613970032785}
   interactButton: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
---- !u!1 &8377500618132432882
+--- !u!1 &9143877524048317906
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -302,42 +324,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9193879141863728326}
-  - component: {fileID: 2623973273517675266}
-  m_Layer: 0
-  m_Name: InventoryManager
+  - component: {fileID: 1220713265061683108}
+  - component: {fileID: 7677863594645334620}
+  m_Layer: 7
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9193879141863728326
+--- !u!4 &1220713265061683108
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8377500618132432882}
+  m_GameObject: {fileID: 9143877524048317906}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 494.37308, y: 131.30577, z: -0.5993607}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 999377685217698036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2623973273517675266
+--- !u!114 &7677863594645334620
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8377500618132432882}
+  m_GameObject: {fileID: 9143877524048317906}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5b29fa742dde644ea641ef8b9f9982e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryUI
   inventory: {fileID: 7643645863367135204}
   slotButtons:
   - {fileID: 0}
