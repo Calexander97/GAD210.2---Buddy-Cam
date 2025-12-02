@@ -1,0 +1,767 @@
+fileFormatVersion: 2
+guid: 6ad0fb51bde08a64ca4ce18dd0a64291
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6388535511419374336
+    second: BuddyCop_UI (1)_0
+  - first:
+      213: 1490025135446422739
+    second: BuddyCop_UI (1)_1
+  - first:
+      213: 7983722793951795532
+    second: BuddyCop_UI (1)_2
+  - first:
+      213: -5761762760862213599
+    second: BuddyCop_UI (1)_3
+  - first:
+      213: -7875950695704834759
+    second: BuddyCop_UI (1)_4
+  - first:
+      213: -1600029601200050142
+    second: BuddyCop_UI (1)_5
+  - first:
+      213: 5895077965375051556
+    second: BuddyCop_UI (1)_6
+  - first:
+      213: -2944797852125537779
+    second: BuddyCop_UI (1)_7
+  - first:
+      213: -5440776088692103428
+    second: BuddyCop_UI (1)_8
+  - first:
+      213: 1897859435879647469
+    second: BuddyCop_UI (1)_9
+  - first:
+      213: -7166086294568619717
+    second: BuddyCop_UI (1)_10
+  - first:
+      213: 8407373063124682264
+    second: BuddyCop_UI (1)_11
+  - first:
+      213: -4624976753510774326
+    second: BuddyCop_UI (1)_12
+  - first:
+      213: -5852647989488354804
+    second: BuddyCop_UI (1)_13
+  - first:
+      213: 8336369825808358145
+    second: BuddyCop_UI (1)_14
+  - first:
+      213: 7074448373395284341
+    second: BuddyCop_UI (1)_15
+  - first:
+      213: 6151449815608541666
+    second: BuddyCop_UI (1)_16
+  - first:
+      213: 3699325992233627276
+    second: BuddyCop_UI (1)_17
+  - first:
+      213: 6235510157382216004
+    second: BuddyCop_UI (1)_18
+  - first:
+      213: -7964988195519014860
+    second: BuddyCop_UI (1)_19
+  - first:
+      213: 9219813949958137413
+    second: BuddyCop_UI (1)_20
+  - first:
+      213: 4510150313001012417
+    second: BuddyCop_UI (1)_21
+  - first:
+      213: 1454470623348968202
+    second: BuddyCop_UI (1)_22
+  - first:
+      213: -2378351649657245763
+    second: BuddyCop_UI (1)_23
+  - first:
+      213: 3029500735078438568
+    second: BuddyCop_UI (1)_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_0
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 2329
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00531eedccc5757a0800000000000000
+      internalID: -6388535511419374336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_1
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 1909
+        width: 742
+        height: 642
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d4ffa857f1ada410800000000000000
+      internalID: 1490025135446422739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_2
+      rect:
+        serializedVersion: 2
+        x: 1379
+        y: 1219
+        width: 1052
+        height: 1332
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c499faed491ebce60800000000000000
+      internalID: 7983722793951795532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_3
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 2109
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12adbbecb4b1a00b0800000000000000
+      internalID: -5761762760862213599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_4
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 1889
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93dc502229003b290800000000000000
+      internalID: -7875950695704834759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_5
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 1549
+        width: 342
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2207c561e8d8bc9e0800000000000000
+      internalID: -1600029601200050142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_6
+      rect:
+        serializedVersion: 2
+        x: 1019
+        y: 1549
+        width: 342
+        height: 342
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42799611d268fc150800000000000000
+      internalID: 5895077965375051556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_7
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 1669
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0a59b8a4f9f127d0800000000000000
+      internalID: -2944797852125537779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_8
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 1449
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf6611b49fa7e74b0800000000000000
+      internalID: -5440776088692103428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_9
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 1229
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de8ca350a1d865a10800000000000000
+      internalID: 1897859435879647469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_10
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 1229
+        width: 52
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b31317e8b72fc8c90800000000000000
+      internalID: -7166086294568619717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_11
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 1229
+        width: 52
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8160cb9b14dfca470800000000000000
+      internalID: 8407373063124682264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_12
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 1229
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac90d889528c0dfb0800000000000000
+      internalID: -4624976753510774326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_13
+      rect:
+        serializedVersion: 2
+        x: 789
+        y: 1229
+        width: 72
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0a742789a737cea0800000000000000
+      internalID: -5852647989488354804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_14
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 1229
+        width: 32
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10b9797403cb0b370800000000000000
+      internalID: 8336369825808358145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_15
+      rect:
+        serializedVersion: 2
+        x: 909
+        y: 1239
+        width: 52
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 571e016405d7d2260800000000000000
+      internalID: 7074448373395284341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_16
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 1229
+        width: 112
+        height: 202
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e14df8f3075e5550800000000000000
+      internalID: 6151449815608541666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_17
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 999
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8e647bd365a65330800000000000000
+      internalID: 3699325992233627276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_18
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 709
+        width: 822
+        height: 502
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4496b14737bf88650800000000000000
+      internalID: 6235510157382216004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_19
+      rect:
+        serializedVersion: 2
+        x: 1449
+        y: 709
+        width: 822
+        height: 502
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 438d8edbf6da67190800000000000000
+      internalID: -7964988195519014860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_20
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 779
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 546227650fb53ff70800000000000000
+      internalID: 9219813949958137413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_21
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 539
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ccca0a50d5479e30800000000000000
+      internalID: 4510150313001012417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_22
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 199
+        width: 822
+        height: 502
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0bc4f863515f2410800000000000000
+      internalID: 1454470623348968202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_23
+      rect:
+        serializedVersion: 2
+        x: 1449
+        y: 199
+        width: 822
+        height: 502
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbf273396c56efed0800000000000000
+      internalID: -2378351649657245763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuddyCop_UI (1)_24
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 309
+        width: 562
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a692291ed2fa0a20800000000000000
+      internalID: 3029500735078438568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BuddyCop_UI (1)_0: -6388535511419374336
+      BuddyCop_UI (1)_1: 1490025135446422739
+      BuddyCop_UI (1)_10: -7166086294568619717
+      BuddyCop_UI (1)_11: 8407373063124682264
+      BuddyCop_UI (1)_12: -4624976753510774326
+      BuddyCop_UI (1)_13: -5852647989488354804
+      BuddyCop_UI (1)_14: 8336369825808358145
+      BuddyCop_UI (1)_15: 7074448373395284341
+      BuddyCop_UI (1)_16: 6151449815608541666
+      BuddyCop_UI (1)_17: 3699325992233627276
+      BuddyCop_UI (1)_18: 6235510157382216004
+      BuddyCop_UI (1)_19: -7964988195519014860
+      BuddyCop_UI (1)_2: 7983722793951795532
+      BuddyCop_UI (1)_20: 9219813949958137413
+      BuddyCop_UI (1)_21: 4510150313001012417
+      BuddyCop_UI (1)_22: 1454470623348968202
+      BuddyCop_UI (1)_23: -2378351649657245763
+      BuddyCop_UI (1)_24: 3029500735078438568
+      BuddyCop_UI (1)_3: -5761762760862213599
+      BuddyCop_UI (1)_4: -7875950695704834759
+      BuddyCop_UI (1)_5: -1600029601200050142
+      BuddyCop_UI (1)_6: 5895077965375051556
+      BuddyCop_UI (1)_7: -2944797852125537779
+      BuddyCop_UI (1)_8: -5440776088692103428
+      BuddyCop_UI (1)_9: 1897859435879647469
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

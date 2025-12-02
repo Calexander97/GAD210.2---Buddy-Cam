@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Codes
   m_EditorClassIdentifier: 
   itemName: Codes
-  icon: {fileID: -5621963177244471619, guid: 3a7cb83c6d843d9498bcc43b104fc53e, type: 3}
+  icon: {fileID: -4406297382807199852, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
   maxStack: 1
   type: 4
   throwablePrefab: {fileID: 0}
