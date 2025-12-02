@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Smoke Grenade
   icon: {fileID: -6829165948154904987, guid: 7278657722f822640b1a168a43c153ae, type: 3}
-  maxStack: 3
+  maxStack: 5
   type: 1
-  throwablePrefab: {fileID: 5647880137369056597, guid: afee1b9d95e957949bf2cedbde7f6852, type: 3}
+  throwablePrefab: {fileID: 6412623045749952866, guid: 71fc9466c48bf084dae24471d673f66d, type: 3}
   throwForce: 2
   lifetime: 1
+  uiPanel: {fileID: 0}

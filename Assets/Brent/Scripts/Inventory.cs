@@ -13,6 +13,9 @@ public class Inventory : MonoBehaviour
     public PlayerInventoryUI ui;
     public SpecialUIPanelManager uiPanelManager;
 
+    [Header("Starting Items")]
+    public List<Item> startingItems = new List<Item>();
+
     private bool isUsingItem = false;
 
     void Awake()
@@ -22,6 +25,13 @@ public class Inventory : MonoBehaviour
             slots.Add(new InventorySlot());
     }
 
+    private void Start()
+    {
+        foreach (var item in startingItems)
+        {
+            AddItem(item, 1);
+        }
+    }
     public void AddItem(Item item, int amount = 1)
     {
         // try to stack first
@@ -138,13 +148,7 @@ public class Inventory : MonoBehaviour
     {
         if (item.throwablePrefab == null) return;
 
-        GameObject spawned = Instantiate(item.throwablePrefab, position, Quaternion.identity);
-
-        Rigidbody2D rb = spawned.GetComponent<Rigidbody2D>();
-        if (rb != null)
-            rb.AddForce(Vector3.zero);
-
-        Destroy(spawned, item.lifetime);
+        Instantiate(item.throwablePrefab, position, Quaternion.identity);
     }
 }
 
