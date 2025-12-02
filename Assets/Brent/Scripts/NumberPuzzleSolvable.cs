@@ -20,6 +20,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
     public GameObject winPanel;
     public Button redoButton;
     public TMP_Text remainingText;
+    private HeroNavAgent2D heroController;
 
     [Header("Terminal")]
     public GameObject terminalPanel;
@@ -48,11 +49,26 @@ public class NumberPuzzleSolvable : MonoBehaviour
         gameObject.SetActive(true);
         winPanel.SetActive(false);
 
+        //  CLEAR OLD TILES BEFORE GENERATING NEW ONES
+        foreach (Transform child in gridParent)
+            Destroy(child.gameObject);
+
+        // reset flags
+        puzzleCompleted = false;
+
+        // movement stop
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            heroController = player.GetComponent<HeroNavAgent2D>();
+        if (heroController != null)
+            heroController.agent.isStopped = true;
+
+        // generate new puzzle
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
 
-        // Initialize remaining nodes counter
+        // remaining nodes counter
         remainingNodes = 0;
         foreach (Tile t in tiles)
             if (t.isSolution)
@@ -102,11 +118,16 @@ public class NumberPuzzleSolvable : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        // hide puzzle UI
         foreach (Transform child in transform)
             child.gameObject.SetActive(false);
 
-        // show terminal panel
+        // hide entire puzzle
+        gameObject.SetActive(false);
+
+        // RE-ENABLE MOVEMENT
+        if (heroController != null)
+            heroController.agent.isStopped = false;
+
         if (terminalPanel != null)
             terminalPanel.SetActive(true);
 
@@ -255,6 +276,19 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 neighbors.Add(new Vector2Int(x, y));
             }
         return neighbors;
+    }
+
+    public void ClosePuzzle()
+    {
+        gameObject.SetActive(false);
+
+        if (winPanel != null)
+            winPanel.SetActive(false);
+
+        if (heroController != null)
+            heroController.agent.isStopped = false;
+
+        Debug.Log("Puzzle closed.");
     }
 }
 
