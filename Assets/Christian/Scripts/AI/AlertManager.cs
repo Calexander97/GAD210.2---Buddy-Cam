@@ -1,45 +1,74 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-/// Simple global relay: a guard that spots the hero can broadcast an LKP.
-/// Nearby guards will move to investigate.
+[DefaultExecutionOrder(-1000)]
 public class AlertManager : MonoBehaviour
 {
-    public static AlertManager Instance { get; private set; }
+    private static AlertManager _instance;
+    public static AlertManager Instance
+    {
+        get
+        {
+            if (_instance) return _instance;
+            _instance = FindObjectOfType<AlertManager>();
+            if (_instance) return _instance;
+            var go = new GameObject("AlertManager");
+            _instance = go.AddComponent<AlertManager>();
+            DontDestroyOnLoad(go);
+            return _instance;
+        }
+    }
 
-    [Tooltip("How far a radio call can reach (world units).")]
-    public float radioRange = 18f;
+    [Tooltip("If enabled, logs registrations and broadcasts.")]
+    public bool verboseLogging = true;
 
-    readonly List<GuardAI> guards = new();
+    private readonly List<GuardAI> _guards = new();
 
     void Awake()
     {
-        if (Instance && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
+        if (_instance && _instance != this) { Destroy(gameObject); return; }
+        _instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     public void Register(GuardAI g)
     {
-        if (g && !guards.Contains(g)) guards.Add(g);
+        if (!g || _guards.Contains(g)) return;
+        _guards.Add(g);
+        if (verboseLogging) Debug.Log($"[Radio] Registered guard: {g.name}");
     }
 
     public void Unregister(GuardAI g)
     {
-        guards.Remove(g);
+        if (!g) return;
+        _guards.Remove(g);
+        if (verboseLogging) Debug.Log($"[Radio] Unregistered guard: {g.name}");
     }
 
-    /// Called by a spotting guard. Everyone else in range goes to investigate.
-    public void BroadcastLKP(Vector2 lkp, GuardAI from)
+    /// Broadcast an LKP to other guards within radius (excludes the sender).
+    public void BroadcastLKP(Vector2 lkp, GuardAI from, float radius)
     {
-        for (int i = 0; i < guards.Count; i++)
-        {
-            var g = guards[i];
-            if (!g || g == from) continue;
-            if ((Vector2)g.transform.position == lkp) continue;
+        if (!from) return;
 
-            if (Vector2.Distance(g.transform.position, lkp) <= radioRange)
-                g.BeginInvestigateExternal(lkp);
+        List<string> picked = null;       // only allocate if we need to log
+        if (verboseLogging) picked = new List<string>();
+
+        for (int i = 0; i < _guards.Count; i++)
+        {
+            var g = _guards[i];
+            if (!g || g == from) continue;
+            if (Vector2.Distance(g.transform.position, lkp) > radius) continue;
+
+            g.BeginInvestigateExternal(lkp);
+            if (verboseLogging) picked.Add(g.name);
+        }
+
+        if (verboseLogging)
+        {
+            if (picked.Count > 0)
+                Debug.Log($"[Radio] {from.name} broadcast LKP {lkp} → {string.Join(", ", picked)}");
+            else
+                Debug.Log($"[Radio] {from.name} broadcast LKP {lkp} → no receivers in range.");
         }
     }
 }

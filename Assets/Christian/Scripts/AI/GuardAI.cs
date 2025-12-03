@@ -1,61 +1,85 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
-/// Minimal AI: Patrol → Alerted (chase/hold) → Investigate (go to LKP then search) → Patrol.
-/// - While ALERTED with LOS: keep a single hold distance (no rushing right up).
-/// - While ALERTED w/o LOS: run to LKP; only leave Alerted after grace expires.
-/// - Never return to Patrol from Alerted unless Investigate finishes.
 [DisallowMultipleComponent]
 [RequireComponent(typeof(NavMeshAgent))]
 public class GuardAI : MonoBehaviour
 {
     [Header("Data / Sensors")]
-    public GuardProfile profile;     // speeds, radii, FOV, etc.
-    public GuardSensors sensors;     // provides target, targetVisible, lastSeenPos, heardRecently, lastHeardPos
+    public GuardProfile profile;
+    public GuardSensors sensors;
 
     [Header("Patrol")]
     public Transform[] patrolPoints;
     public float waypointTolerance = 0.15f;
 
-    [Header("Engage (hold distance)")]
-    public float holdDistance = 3.0f;    // desired distance to hero while shooting
-    public float replanEvery = 0.2f;     // seconds between SetDestination calls
-    public float sampleRadius = 1.5f;    // for NavMesh.SamplePosition
+    [Header("Engage")]
+    [Tooltip("Preferred standoff distance while firing.")]
+    public float engageDistance = 3.0f;
+    [Tooltip("Tiny band to avoid micro-oscillation around the distance.")]
+    public float engageSlack = 0.35f;
 
-    [Header("Alert → Investigate transition")]
-    public float lostSightGrace = 0.8f;  // how long we keep chasing after LOS breaks
+    [Header("Alert → Investigate")]
+    [Tooltip("How long to keep heading for LKP after LOS is lost before switching to Investigate search.")]
+    public float lostSightGrace = 0.8f;
 
     [Header("Investigate")]
-    public float dwellAtSpot = 1.0f;     // pause at each search point
-    public float searchRadius = 2.0f;    // local wander radius around LKP
-    public float searchTime = 6.0f;      // total time to search before Patrol
+    [Tooltip("Pause at each random search point.")]
+    public float dwellAtSpot = 1.0f;
+    [Tooltip("Random search radius around the LKP.")]
+    public float searchRadius = 2.0f;
+    [Tooltip("Total time to search before returning to patrol.")]
+    public float searchTime = 6.0f;
 
     [Header("Facing")]
-    public float faceLerp = 18f;         // rotate smoothly like hero
-    public bool forwardIsUp = true;      // set true if sprite art looks ↑
-    public float stopThreshold = 0.02f;  // below this, keep last facing
+    public bool forwardIsUp = true;
+    public float turnSpeed = 360f;
+
+    [Header("Stability")]
+    [Tooltip("A short cool-down after killing the hero to avoid instant re-triggering.")]
+    public float postKillCalm = 1.25f;
+
+    [Header("Radio")]
+    [Tooltip("Who hears the LKP when LOS is lost.")]
+    public float radioRange = 18f;
+    [Tooltip("Optional icon shown briefly when broadcasting.")]
+    public GameObject radioIcon;
+    public float radioPingDuration = 3f;
 
     public enum State { Patrol, Alerted, Investigate }
     public State state = State.Patrol;
 
+    // Internals
     NavMeshAgent agent;
     int patrolIndex;
     float lostSightTimer;
     float searchTimer;
     float totalSearchTime;
-    Vector2 searchCenter;
-    float planTimer;
-    Vector2 lastMoveDir = Vector2.right;
+    Vector2 searchCenter;          // fixed LKP for the current Investigate
+    bool goingToLKP = false;       // first phase of Investigate: move to exact LKP
+
     HeroHealth targetHealth;
     Transform lastTarget;
+    Vector2 lastFacingDir = Vector2.right;
+    float ignorePerceptionUntil = 0f;
 
+    // Edge detect for LOS → triggers radio once per loss event
+    bool hadLOSLastFrame = false;
 
+    void OnEnable() { AlertManager.Instance.Register(this); }
+
+    void OnDisable()
+    {
+        AlertManager.Instance?.Unregister(this);
+        if (targetHealth) targetHealth.OnDied -= OnTargetDied;
+    }
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.updateUpAxis = false;      // XY
-        agent.updateRotation = false;    // we rotate 2D ourselves
+        agent.updateUpAxis = false;
+        agent.updateRotation = false;
         if (!sensors) sensors = GetComponent<GuardSensors>();
     }
 
@@ -71,9 +95,10 @@ public class GuardAI : MonoBehaviour
         if (patrolPoints != null && patrolPoints.Length > 0)
             agent.SetDestination(patrolPoints[patrolIndex].position);
 
-        WireTargetHealth(); // <-- subscribe to current target (if set)
-    }
+        if (radioIcon) radioIcon.SetActive(false);
 
+        WireTargetHealth();
+    }
 
     void Update()
     {
@@ -84,40 +109,29 @@ public class GuardAI : MonoBehaviour
             case State.Investigate: TickInvestigate(); break;
         }
 
-        // — Perception transitions —
-        if (!sensors || !profile) return;
-
-        if (state == State.Patrol && sensors.heardRecently)
+        // Heard something while patrolling?
+        if (sensors && profile && Time.time >= ignorePerceptionUntil)
         {
-            BeginInvestigate(sensors.lastHeardPos);
+            if (state == State.Patrol && sensors.heardRecently)
+                BeginInvestigate(sensors.lastHeardPos);
         }
 
-    if (sensors)
-    {
-        var current = sensors.target;
-        if (current != lastTarget)
-            WireTargetHealth();
-    }
-    // Face movement like the hero
-    FaceByVelocity();
-        
+        Face();
     }
 
-    // ---------- States ----------
-
+    // ── Patrol ──────────────────────────────────────────────────────────────────
     void TickPatrol()
     {
-        agent.speed = profile ? profile.patrolSpeed : agent.speed;
-
+        if (profile) agent.speed = profile.patrolSpeed;
         if (patrolPoints == null || patrolPoints.Length == 0) return;
 
-        // If we SEE the target, go Alerted immediately.
-        if (sensors.targetVisible)
+        // Immediate switch to Alerted when we see the target (unless calming down)
+        if (sensors.targetVisible && Time.time >= ignorePerceptionUntil)
         {
             state = State.Alerted;
-            agent.speed = profile ? profile.chaseSpeed : agent.speed;
+            if (profile) agent.speed = profile.chaseSpeed;
             lostSightTimer = 0f;
-            planTimer = 0f;
+            hadLOSLastFrame = true; // we are starting Alerted with LOS
             return;
         }
 
@@ -128,183 +142,204 @@ public class GuardAI : MonoBehaviour
         }
     }
 
+    // ── Alerted ─────────────────────────────────────────────────────────────────
     void TickAlerted()
     {
-        agent.speed = profile ? profile.chaseSpeed : agent.speed;
+        if (profile) agent.speed = profile.chaseSpeed;
 
-        var tgt = sensors.target;
+        var tgt = sensors ? sensors.target : null;
         if (!tgt || TargetIsDead())
-
         {
-            // hero gone/dead → clean break from combat
+            // Clean break: hero gone / dead
             state = State.Patrol;
             agent.ResetPath();
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
+            ignorePerceptionUntil = Time.time + postKillCalm;
+            hadLOSLastFrame = false;
             return;
         }
 
-        // If we have LOS: stay near holdDistance (don’t rush up).
-        if (sensors.targetVisible)
+        bool inLOS = sensors.targetVisible;
+
+        // EDGE: just lost LOS → broadcast immediately and head to LKP
+        if (!inLOS && hadLOSLastFrame)
         {
-            lostSightTimer = 0f;
+            AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
+            if (radioIcon) StartCoroutine(RadioFlash());
+            lostSightTimer = 0f; // start grace period from this instant
+        }
 
-            planTimer -= Time.deltaTime;
-            if (planTimer <= 0f)
+        if (inLOS)
+        {
+            // Maintain a standoff band (simple approach/hold/backoff).
+            Vector2 guardPos = transform.position;
+            Vector2 targetPos = tgt.position;
+            Vector2 to = targetPos - guardPos;
+            float dist = to.magnitude;
+
+            float min = Mathf.Max(0.1f, engageDistance - engageSlack);
+            float max = engageDistance + engageSlack;
+
+            if (dist > max)
             {
-                planTimer = replanEvery;
-
-                Vector2 guardPos = transform.position;
-                Vector2 targetPos = tgt.position;
-                Vector2 to = (targetPos - guardPos);
-                float dist = to.magnitude;
-
-                // Desired “ring” point at holdDistance from the target.
-                Vector2 desired = targetPos - to.normalized * Mathf.Max(holdDistance, 0.1f);
-
-                if (NavMesh.SamplePosition(desired, out var hit, sampleRadius, NavMesh.AllAreas))
-                {
-                    // Only set a new path if we’re not already very close to the desired point.
-                    if (!agent.hasPath || Vector2.Distance(agent.destination, (Vector2)hit.position) > 0.1f)
-                        agent.SetDestination(hit.position);
-                }
-                else
-                {
-                    // Fallback: just head toward the target (NavMesh will sort obstacles)
-                    agent.SetDestination(targetPos);
-                }
+                agent.isStopped = false;
+                agent.SetDestination(targetPos);
             }
+            else if (dist < min)
+            {
+                agent.isStopped = false;
+                Vector2 desired = targetPos - to.normalized * engageDistance;
+                if (NavMesh.SamplePosition(desired, out var hit, 1.25f, NavMesh.AllAreas))
+                    agent.SetDestination(hit.position);
+                else
+                    agent.SetDestination(desired);
+            }
+            else
+            {
+                agent.isStopped = true;
+                if (agent.hasPath) agent.ResetPath();
+            }
+
+            lostSightTimer = 0f; // reset grace while visible
         }
         else
         {
-            // No LOS: head to last seen position; only leave Alerted after grace
+            // While we’re in grace, keep moving to the exact LKP
             lostSightTimer += Time.deltaTime;
-            var lkp = sensors.lastSeenPos;
+            Vector3 lkp = sensors.lastSeenPos;
 
-            if (!agent.pathPending && Vector2.Distance(agent.destination, lkp) > 0.1f)
+            agent.isStopped = false;
+            if (!agent.pathPending && Vector3.Distance(agent.destination, lkp) > 0.05f)
                 agent.SetDestination(lkp);
 
+            // After grace, switch to Investigate (random search around that same LKP)
             if (lostSightTimer >= lostSightGrace)
             {
-                BeginInvestigate(lkp);
+                BeginInvestigate(sensors.lastSeenPos);
             }
         }
 
-        bool TargetIsDead()
-        {
-            return !targetHealth || targetHealth.Current <= 0 || !targetHealth.gameObject.activeInHierarchy;
-        }
+        // Store for next frame’s edge detection
+        hadLOSLastFrame = inLOS;
     }
 
+    // ── Investigate ─────────────────────────────────────────────────────────────
     void TickInvestigate()
     {
-        agent.speed = profile ? profile.patrolSpeed : agent.speed;
+        if (profile) agent.speed = profile.patrolSpeed;
 
-        // See the player again? Go straight back to Alerted.
-        if (sensors.targetVisible)
+        // Regain LOS → switch back to Alerted (unless in calm)
+        if (sensors.targetVisible && Time.time >= ignorePerceptionUntil)
         {
             state = State.Alerted;
             lostSightTimer = 0f;
-            planTimer = 0f;
+            hadLOSLastFrame = true;
             return;
         }
 
         totalSearchTime += Time.deltaTime;
 
-        // Arrived at search point → dwell, then pick another
-        if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
+        // Phase 1: go to exact LKP, then begin local search
+        if (goingToLKP)
         {
-            searchTimer += Time.deltaTime;
-            if (searchTimer >= dwellAtSpot)
+            if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
             {
+                goingToLKP = false;
                 searchTimer = 0f;
-                PickNewSearchPoint();
+                PickNewSearchPoint(); // first random spot around fixed searchCenter
+            }
+            else
+            {
+                if (!agent.hasPath || Vector3.Distance(agent.destination, (Vector3)searchCenter) > 0.05f)
+                    agent.SetDestination((Vector3)searchCenter);
+            }
+        }
+        else
+        {
+            // Phase 2: random local search around the LKP
+            if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
+            {
+                searchTimer += Time.deltaTime;
+                if (searchTimer >= dwellAtSpot)
+                {
+                    searchTimer = 0f;
+                    PickNewSearchPoint();
+                }
             }
         }
 
-        // Search timeout → Patrol
         if (totalSearchTime >= searchTime)
         {
             state = State.Patrol;
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
+            hadLOSLastFrame = false;
         }
     }
 
-    // ---------- Transitions / helpers ----------
-
+    // ── Transitions / helpers ───────────────────────────────────────────────────
     void BeginInvestigate(Vector2 center)
     {
         state = State.Investigate;
-        searchCenter = center;
+        searchCenter = center;     // lock the LKP once per investigate
         searchTimer = 0f;
         totalSearchTime = 0f;
-        PickNewSearchPoint();
+        goingToLKP = true;
+        agent.isStopped = false;
+        agent.SetDestination((Vector3)searchCenter);
+        hadLOSLastFrame = false;   // we are entering search without LOS
     }
 
     void PickNewSearchPoint()
     {
-        var offset = Random.insideUnitCircle * Mathf.Max(0.1f, searchRadius);
-        var target = searchCenter + offset;
+        Vector2 offset = Random.insideUnitCircle * Mathf.Max(0.1f, searchRadius);
+        Vector2 target = searchCenter + offset;
 
-        if (NavMesh.SamplePosition(target, out var hit, 1.5f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition((Vector3)target, out var hit, 1.5f, NavMesh.AllAreas))
             agent.SetDestination(hit.position);
         else
-            agent.SetDestination(searchCenter);
+            agent.SetDestination((Vector3)searchCenter);
     }
 
-    void FaceByVelocity()
+    bool TargetIsDead()
     {
-        var v = agent.velocity;
-        Vector2 dir;
-        if (v.sqrMagnitude > stopThreshold * stopThreshold)
-        {
-            dir = new Vector2(v.x, v.y).normalized;
-            lastMoveDir = dir;
-        }
+        return !targetHealth || targetHealth.Current <= 0 || !targetHealth.gameObject.activeInHierarchy;
+    }
+
+    // ── Facing ──────────────────────────────────────────────────────────────────
+    void Face()
+    {
+        Vector2 desired;
+
+        if (state == State.Alerted && sensors && sensors.target)
+            desired = (Vector2)sensors.target.position - (Vector2)transform.position;
         else
         {
-            dir = lastMoveDir;
+            var v = agent.velocity;
+            desired = (v.sqrMagnitude > 0.0001f) ? new Vector2(v.x, v.y) : lastFacingDir;
         }
 
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        var targetRot = Quaternion.Euler(0f, 0f, forwardIsUp ? (angle - 90f) : angle);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, faceLerp * Time.deltaTime);
+        if (desired.sqrMagnitude < 0.0001f) return;
+
+        desired.Normalize();
+        lastFacingDir = desired;
+
+        float angle = Mathf.Atan2(desired.y, desired.x) * Mathf.Rad2Deg;
+        float z = forwardIsUp ? (angle - 90f) : angle;
+
+        var goal = Quaternion.Euler(0f, 0f, z);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, goal, turnSpeed * Time.deltaTime);
     }
 
-    // Called by AlertManager (radio cascade) so other guards join the search.
-    // Ignore if this guard is already in a direct chase.
-    public void BeginInvestigateExternal(Vector2 center)
-    {
-        if (state == State.Alerted) return; // keep chasing if we already have LOS
-        BeginInvestigate(center);
-    }
-
+    // ── Health wiring ───────────────────────────────────────────────────────────
     void OnTargetDied()
     {
-        // stop shooting/chasing and go back to patrol now
-        state = State.Patrol;
-        if (profile) agent.speed = profile.patrolSpeed;
-
-        // head to current/next patrol waypoint if any
-        if (patrolPoints != null && patrolPoints.Length > 0)
-        {
-            if (!agent.hasPath) agent.SetDestination(patrolPoints[patrolIndex].position);
-        }
-        else
-        {
-            agent.ResetPath(); // idle if no patrol
-        }
-    }
-
-    void OnDisable()
-    {
-        if (targetHealth) targetHealth.OnDied -= OnTargetDied;
+        ignorePerceptionUntil = Time.time + postKillCalm;
     }
 
     void WireTargetHealth()
     {
-        // unsubscribe previous
         if (targetHealth) targetHealth.OnDied -= OnTargetDied;
 
         targetHealth = null;
@@ -315,5 +350,26 @@ public class GuardAI : MonoBehaviour
             targetHealth = lastTarget.GetComponent<HeroHealth>();
             if (targetHealth) targetHealth.OnDied += OnTargetDied;
         }
+    }
+
+    // Called by AlertManager so other guards can join the search.
+    public void BeginInvestigateExternal(Vector2 center)
+    {
+        if (state == State.Alerted) return; // keep chasing if we already have LOS
+        BeginInvestigate(center);
+    }
+
+    IEnumerator RadioFlash()
+    {
+        if (!radioIcon) yield break;
+        radioIcon.SetActive(true);
+        yield return new WaitForSeconds(radioPingDuration);
+        radioIcon.SetActive(false);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.7f, 0.1f, 0.6f);
+        Gizmos.DrawWireSphere(transform.position, radioRange);
     }
 }

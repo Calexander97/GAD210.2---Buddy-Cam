@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP_Default
   m_EditorClassIdentifier: Assembly-CSharp::GuardProfile
   visionRange: 12
-  fov: 120
+  fov: 196
   losMask:
     serializedVersion: 2
     m_Bits: 16448
