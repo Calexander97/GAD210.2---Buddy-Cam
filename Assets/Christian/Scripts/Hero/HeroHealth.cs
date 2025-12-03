@@ -37,5 +37,11 @@ public class HeroHealth : MonoBehaviour
         }
     }
 
+    public void Heal(int amount = 1)
+    {
+        hearts = Mathf.Min(maxHearts, hearts + amount);
+        onDamaged?.Invoke(); 
+    }
+
     public int Current => hearts;
 }

@@ -18,4 +18,7 @@ public class Item : ScriptableObject
 
     [Header("Special UI Panel")]
     public GameObject uiPanel;
+
+    [Header("Healing Settings")]
+    public int healAmount = 1;
 }

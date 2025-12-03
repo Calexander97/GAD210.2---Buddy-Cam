@@ -12,6 +12,7 @@ public class Inventory : MonoBehaviour
     public Transform throwOrigin;
     public PlayerInventoryUI ui;
     public SpecialUIPanelManager uiPanelManager;
+    public GameObject player;
 
     [Header("Starting Items")]
     public List<Item> startingItems = new List<Item>();
@@ -131,10 +132,30 @@ public class Inventory : MonoBehaviour
         // --- CONSUMABLE ITEM ---
         if (item.type == Item.ItemType.Consumable)
         {
-            slot.count--;
-            if (slot.count <= 0) slot.Clear();
+            HeroHealth health = player.GetComponent<HeroHealth>();
 
-            ui?.UpdateUI();
+            if (health != null)
+            {
+                // only use if player is missing health
+                if (health.Current < health.maxHearts)
+                {
+                    health.Heal(item.healAmount);
+
+                    slot.count--;
+                    if (slot.count <= 0) slot.Clear();
+
+                    ui?.UpdateUI();
+                    isUsingItem = false;
+                    return;
+                }
+                else
+                {
+                    Debug.Log("Health is full — cannot use this item.");
+                    isUsingItem = false;
+                    return;
+                }
+            }
+
             isUsingItem = false;
             return;
         }
