@@ -16,7 +16,7 @@ MonoBehaviour:
   icon: {fileID: 3144579079024322025, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
   maxStack: 5
   type: 1
-  throwablePrefab: {fileID: 6412623045749952866, guid: 71fc9466c48bf084dae24471d673f66d, type: 3}
-  throwForce: 2
-  lifetime: 1
+  projectilePrefab: {fileID: 444573947075327425, guid: e34cf3554b1f34f4689f53c03305aece, type: 3}
+  placedItemPrefab: {fileID: 6412623045749952866, guid: 71fc9466c48bf084dae24471d673f66d, type: 3}
   uiPanel: {fileID: 0}
+  healAmount: 1

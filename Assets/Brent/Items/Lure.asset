@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemName: Lure
   icon: {fileID: 8066785366512648557, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
-  maxStack: 1
+  maxStack: 5
   type: 1
-  throwablePrefab: {fileID: 5191764969934464164, guid: a657bf0b501e3254f9defb5d10c8c6b8, type: 3}
-  throwForce: 10
-  lifetime: 2
+  projectilePrefab: {fileID: 2972764319762041856, guid: 8cb65187af0ac5f43bbba358404a7541, type: 3}
+  placedItemPrefab: {fileID: 5191764969934464164, guid: a657bf0b501e3254f9defb5d10c8c6b8, type: 3}
   uiPanel: {fileID: 0}
   healAmount: 0

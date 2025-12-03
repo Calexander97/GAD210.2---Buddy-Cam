@@ -12,9 +12,8 @@ public class Item : ScriptableObject
     public ItemType type;
 
     [Header("Throwable Settings")]
-    public GameObject throwablePrefab;
-    public float throwForce = 10f;
-    public float lifetime = 2f;
+    public GameObject projectilePrefab;
+    public GameObject placedItemPrefab;
 
     [Header("Special UI Panel")]
     public GameObject uiPanel;

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1211841002290735418
+--- !u!1 &444573947075327425
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,54 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3679782839838060552}
-  - component: {fileID: 107214507448294698}
-  - component: {fileID: 9017664390972830240}
-  - component: {fileID: -4671264747912931326}
-  m_Layer: 14
-  m_Name: SmokeCloud
+  - component: {fileID: 5438372086778236227}
+  - component: {fileID: 4119357965526492071}
+  - component: {fileID: 126501771699208926}
+  - component: {fileID: 280298791353836868}
+  - component: {fileID: 807179159782039201}
+  m_Layer: 0
+  m_Name: SmokeGrenadeProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3679782839838060552
+--- !u!4 &5438372086778236227
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211841002290735418}
+  m_GameObject: {fileID: 444573947075327425}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.587, y: -1.876, z: 0}
-  m_LocalScale: {x: 0.0026949476, y: 0.0026949476, z: 0.0026949476}
+  m_LocalPosition: {x: -1.006785, y: 1.441955, z: 0}
+  m_LocalScale: {x: 0.0428, y: 0.0428, z: 0.14263}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &107214507448294698
+--- !u!114 &4119357965526492071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444573947075327425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd44aaca71f56d489b22a8d663d2677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LureProjectile
+  speed: 3
+  arcHeight: 1
+--- !u!212 &126501771699208926
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211841002290735418}
+  m_GameObject: {fileID: 444573947075327425}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,25 +95,25 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -386263321
   m_SortingLayer: 2
-  m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: cb980f0b9995882419a9a3dc897c3d23, type: 3}
-  m_Color: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 0.87058824}
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 3144579079024322025, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 510.8125, y: 429.0027}
+  m_Size: {x: 5.6875, y: 7.5625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &9017664390972830240
-CircleCollider2D:
+--- !u!61 &280298791353836868
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211841002290735418}
+  m_GameObject: {fileID: 444573947075327425}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -126,18 +141,42 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 9.330929, y: 0}
-  m_Radius: 454.4646
---- !u!114 &-4671264747912931326
-MonoBehaviour:
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 7.5625, y: 8.8125}
+    newSize: {x: 5.6875, y: 7.5625}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 5.6875, y: 7.5625}
+  m_EdgeRadius: 0
+--- !u!50 &807179159782039201
+Rigidbody2D:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211841002290735418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 695e48e34ea98794692f2f210b0ad711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SmokeCloud
-  duration: 10
+  m_GameObject: {fileID: 444573947075327425}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
