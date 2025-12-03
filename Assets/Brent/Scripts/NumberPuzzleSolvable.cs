@@ -123,6 +123,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     private IEnumerator WinSequence()
     {
+        SFXManager.Instance.PlaySFX(SFXManager.Instance.puzzleComplete);
         yield return new WaitForSeconds(2f);
 
         // hide puzzle visuals
@@ -140,6 +141,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
         {
             UIBlocker.Instance.uiOpen = true;
             terminalPanel.SetActive(true);
+
         }
 
         successCallback?.Invoke();

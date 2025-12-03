@@ -7,10 +7,26 @@ public class SmokeGrenade : MonoBehaviour
     public GameObject smokeCloudPrefab;
     public float smokeDuration = 6f;
 
+    [Header("Audio")]
+    public AudioClip activateSFX;
+    public float sfxLeadTime = 0.1f;
+
     private void Start()
     {
-        // Start the fuse timer
+        // SFX slightly before the smoke appears
+        if (activateSFX != null && SFXManager.Instance != null)
+        {
+            float sfxTime = Mathf.Max(0f, fuseTime - sfxLeadTime);
+            Invoke(nameof(PlaySFX), sfxTime);
+        }
+
+        // actual smoke explosion
         Invoke(nameof(Detonate), fuseTime);
+    }
+
+    void PlaySFX()
+    {
+        SFXManager.Instance.PlaySFX(activateSFX);
     }
 
     void Detonate()

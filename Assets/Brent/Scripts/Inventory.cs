@@ -150,6 +150,7 @@ public class Inventory : MonoBehaviour
 
                     // spawn projectile at player
                     GameObject proj = Instantiate(item.projectilePrefab, origin, Quaternion.identity);
+                    SFXManager.Instance.PlaySFX(SFXManager.Instance.itemThrow);
 
                     // initialise arc with the clamped target
                     LureProjectile lp = proj.GetComponent<LureProjectile>();

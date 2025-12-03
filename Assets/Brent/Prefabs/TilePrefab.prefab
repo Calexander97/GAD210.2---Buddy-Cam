@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3211826710932372046}
   - component: {fileID: 7836187796386556379}
   - component: {fileID: 2704072608132217256}
+  - component: {fileID: -1322906806604858758}
   m_Layer: 0
   m_Name: TilePrefab
   m_TagString: Untagged
@@ -138,10 +139,20 @@ MonoBehaviour:
   y: 0
   isSolution: 0
   isRevealedClue: 0
-  clueNumber: 0
-  text: {fileID: 4981686678439112766}
-  background: {fileID: 3211826710932372046}
-  isOn: 0
+  currentState: 0
+--- !u!114 &-1322906806604858758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477026929991261406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1639e87e8a312249b921a98cc7d16b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSFX
+  clip: {fileID: 8300000, guid: 84d1031d3db9f414d9b7a6a56fe3d4cf, type: 3}
 --- !u!1 &6156313571397017658
 GameObject:
   m_ObjectHideFlags: 0
