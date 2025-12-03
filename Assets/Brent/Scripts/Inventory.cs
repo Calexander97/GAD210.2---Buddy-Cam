@@ -120,11 +120,19 @@ public class Inventory : MonoBehaviour
         // --- THROWABLE ITEM ---
         if (item.type == Item.ItemType.Throwable)
         {
-            DropItem(item, throwOrigin.position);
+            if (NextClickAction.Instance != null)
+            {
+                NextClickAction.Instance.onNextClick = (Vector2 pos) =>
+                {
+                    Instantiate(item.throwablePrefab, pos, Quaternion.identity);
+                };
+            }
+
+            // consume one from the stack
             slot.count--;
             if (slot.count <= 0) slot.Clear();
+            ui.UpdateUI();
 
-            ui?.UpdateUI();
             isUsingItem = false;
             return;
         }

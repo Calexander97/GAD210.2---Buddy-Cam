@@ -5938,6 +5938,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7390987456170392277, guid: 3d6258ad681131d4cac07ef9be1b906f, type: 3}
   m_PrefabInstance: {fileID: 182863693}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &614756398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 614756399}
+  - component: {fileID: 614756400}
+  m_Layer: 0
+  m_Name: ThrowManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &614756399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614756398}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1538723466}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &614756400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614756398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b88e52fc783f22439148f81c7b9dd69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NextClickAction
 --- !u!1001 &620313970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6614,6 +6658,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1974429845365332651, guid: 3d6258ad681131d4cac07ef9be1b906f, type: 3}
   m_PrefabInstance: {fileID: 2120580969}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &716637370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 716637371}
+  - component: {fileID: 716637372}
+  m_Layer: 0
+  m_Name: UI Blocker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &716637371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716637370}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1538723466}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &716637372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716637370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3af638d389076a14ba6022c9fc554c3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIBlocker
+  uiOpen: 0
 --- !u!20 &725867781 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 6246720246382528818, guid: b7eb9bd4a8d1d9a40b5aef1ba8662670, type: 3}
@@ -10228,7 +10317,7 @@ PrefabInstance:
       objectReference: {fileID: 1746691401927139070}
     - target: {fileID: 7643645863367135204, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
       propertyPath: startingItems.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7643645863367135204, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
       propertyPath: 'startingItems.Array.data[3]'
@@ -10242,6 +10331,10 @@ PrefabInstance:
       propertyPath: 'startingItems.Array.data[5]'
       value: 
       objectReference: {fileID: 11400000, guid: 2ba2aa5a9b4d4394eb659d35a6abddf2, type: 2}
+    - target: {fileID: 7643645863367135204, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
+      propertyPath: 'startingItems.Array.data[6]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f2aa996695b1c6048aef950fc91c8296, type: 2}
     - target: {fileID: 7677863594645334620, guid: d793d79693a64bb489b05bb717eb4c87, type: 3}
       propertyPath: useButton
       value: 
@@ -13486,6 +13579,8 @@ Transform:
   - {fileID: 64025052}
   - {fileID: 1332413155}
   - {fileID: 1570319131}
+  - {fileID: 614756399}
+  - {fileID: 716637371}
   m_Father: {fileID: 361778831}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1541937753

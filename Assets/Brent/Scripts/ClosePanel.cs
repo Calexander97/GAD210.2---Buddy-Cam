@@ -18,6 +18,8 @@ public class ClosePanel : MonoBehaviour
             HeroNavAgent2D hero = player.GetComponent<HeroNavAgent2D>();
             if (hero != null)
                 hero.agent.isStopped = false;
+
         }
+        UIBlocker.Instance.uiOpen = false;
     }
 }

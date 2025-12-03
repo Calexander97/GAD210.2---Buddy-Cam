@@ -31,6 +31,8 @@ public class KeypadPuzzle : MonoBehaviour
         keypadPanel.SetActive(true);
         isOpen = true;
 
+        UIBlocker.Instance.uiOpen = true;
+
         // stop hero movement
         heroController = player.GetComponent<HeroNavAgent2D>();
         if (heroController != null)
@@ -102,6 +104,8 @@ public class KeypadPuzzle : MonoBehaviour
         heroController = null;
         currentInput = "";
         UpdateDisplay();
+
+        UIBlocker.Instance.uiOpen = false;
     }
 
     public void OnCancelPressed()

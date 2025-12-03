@@ -44,31 +44,32 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     public void OpenPuzzle(Action success = null)
     {
+        // BLOCK ALL CLICKS / MOVEMENT WHILE PUZZLE IS OPEN
+        UIBlocker.Instance.uiOpen = true;
+
         successCallback = success;
 
         gameObject.SetActive(true);
         winPanel.SetActive(false);
 
-        //  CLEAR OLD TILES BEFORE GENERATING NEW ONES
+        // Clear any old tiles
         foreach (Transform child in gridParent)
             Destroy(child.gameObject);
 
-        // reset flags
         puzzleCompleted = false;
 
-        // movement stop
+        // Stop player movement
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
             heroController = player.GetComponent<HeroNavAgent2D>();
         if (heroController != null)
             heroController.agent.isStopped = true;
 
-        // generate new puzzle
+        // Generate a new puzzle
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
 
-        // remaining nodes counter
         remainingNodes = 0;
         foreach (Tile t in tiles)
             if (t.isSolution)
@@ -108,46 +109,46 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     private void Win()
     {
-        puzzleCompleted = true;   // mark as completed
+        puzzleCompleted = true;
         winPanel.SetActive(true);
         StartCoroutine(WinSequence());
     }
-
 
     private IEnumerator WinSequence()
     {
         yield return new WaitForSeconds(2f);
 
+        // hide puzzle visuals
         foreach (Transform child in transform)
             child.gameObject.SetActive(false);
 
-        // hide entire puzzle
         gameObject.SetActive(false);
 
-        // RE-ENABLE MOVEMENT
+        // RE-ENABLE PLAYER MOVEMENT
         if (heroController != null)
             heroController.agent.isStopped = false;
 
+        // ppen terminal panel
         if (terminalPanel != null)
+        {
+            UIBlocker.Instance.uiOpen = true;
             terminalPanel.SetActive(true);
+        }
 
         successCallback?.Invoke();
     }
 
     private void ResetPuzzle()
     {
-        // destroy old tiles
         foreach (Transform child in gridParent)
             Destroy(child.gameObject);
 
         winPanel.SetActive(false);
 
-        // generate new puzzle
         GenerateGrid();
         GenerateSolution();
         PlaceCluesWithSettings();
 
-        // reset the remaining nodes counter
         CountInitialSolutions();
         UpdateRemainingUI();
     }
@@ -161,6 +162,7 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
         UpdateRemainingUI();
     }
+
     void GenerateGrid()
     {
         tiles = new Tile[width, height];
@@ -191,7 +193,6 @@ public class NumberPuzzleSolvable : MonoBehaviour
                 tiles[x, y].isSolution = true;
             }
         }
-        Debug.Log("Solution tiles: " + tiles.Cast<Tile>().Count(t => t.isSolution));
     }
 
     void PlaceCluesWithSettings()
@@ -280,13 +281,18 @@ public class NumberPuzzleSolvable : MonoBehaviour
 
     public void ClosePuzzle()
     {
+        // hide UI
         gameObject.SetActive(false);
 
         if (winPanel != null)
             winPanel.SetActive(false);
 
+        // re-enable movement
         if (heroController != null)
             heroController.agent.isStopped = false;
+
+        // re-enable game clicks
+        UIBlocker.Instance.uiOpen = false;
 
         Debug.Log("Puzzle closed.");
     }

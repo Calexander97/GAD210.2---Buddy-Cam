@@ -20,6 +20,10 @@ public class SingleFeedClickRouterNav : MonoBehaviour
     void Update()
     {
         if (!Input.GetMouseButtonDown(0)) return;
+
+        // sstop all click movement / interactions while puzzle or UI is open
+        if (UIBlocker.Instance != null && UIBlocker.Instance.uiOpen)
+            return;
         if (!hero || !switcher) return;
 
         if (requirePointerOverFeed &&
@@ -30,6 +34,12 @@ public class SingleFeedClickRouterNav : MonoBehaviour
         if (!cam) return;
 
         if (!TryFeedClickToWorld(cam, out var world)) return;
+
+        // let NextClickAction consume this click if it wants
+        if (NextClickAction.Instance != null && NextClickAction.Instance.TryConsume(world))
+        {
+            return; // click used, don't move
+        }
 
         // 1) Direct interactable under the cursor?
         var under = Physics2D.OverlapPoint(world, interactMask);
@@ -42,7 +52,7 @@ public class SingleFeedClickRouterNav : MonoBehaviour
         // 2) Soft-snap ground clicks to nearby interactables (quality-of-life).
         if (interactSnapRadius > 0f)
         {
-            var near = Physics2D.OverlapCircleAll(world, interactSnapRadius, interactMask);
+            var near = Physics2D.OverlapCircleAll(world, interactMask);
             if (near != null)
             {
                 for (int i = 0; i < near.Length; i++)
