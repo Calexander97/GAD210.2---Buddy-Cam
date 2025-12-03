@@ -22,6 +22,10 @@ public class NumberPuzzleSolvable : MonoBehaviour
     public TMP_Text remainingText;
     private HeroNavAgent2D heroController;
 
+    [Header("Help Panel")]
+    public GameObject helpPanel;
+    public Button helpCloseButton;
+
     [Header("Terminal")]
     public GameObject terminalPanel;
 
@@ -40,6 +44,9 @@ public class NumberPuzzleSolvable : MonoBehaviour
         gameObject.SetActive(false);
         if (redoButton != null)
             redoButton.onClick.AddListener(ResetPuzzle);
+
+        if (helpCloseButton != null)
+            helpCloseButton.onClick.AddListener(CloseHelp);
     }
 
     public void OpenPuzzle(Action success = null)
@@ -295,6 +302,29 @@ public class NumberPuzzleSolvable : MonoBehaviour
         UIBlocker.Instance.uiOpen = false;
 
         Debug.Log("Puzzle closed.");
+    }
+
+    public void OpenHelp()
+    {
+        Debug.Log("HELP BUTTON CLICKED");
+
+        if (helpPanel == null)
+        {
+            Debug.Log("helpPanel is NULL");
+            return;
+        }
+
+        helpPanel.SetActive(true);
+    }
+
+    public void CloseHelp()
+    {
+        if (helpPanel == null) return;
+
+        helpPanel.SetActive(false);
+
+        if (heroController != null)
+            heroController.agent.isStopped = false;
     }
 }
 
