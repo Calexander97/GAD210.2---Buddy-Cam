@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour
 
     void Awake()
     {
-        int slotCount = 4;
+        int slotCount = 5;
         for (int i = 0; i < slotCount; i++)
             slots.Add(new InventorySlot());
     }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lure
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemName: Lure
-  icon: {fileID: 8066785366512648557, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
+  icon: {fileID: 21300000, guid: ef182bb1296cbb041b2e880d34e318d9, type: 3}
   maxStack: 5
   type: 1
   projectilePrefab: {fileID: 2972764319762041856, guid: 8cb65187af0ac5f43bbba358404a7541, type: 3}
