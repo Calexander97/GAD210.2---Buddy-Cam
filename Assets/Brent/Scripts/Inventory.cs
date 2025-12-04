@@ -27,22 +27,24 @@ public class Inventory : MonoBehaviour
             slots.Add(new InventorySlot());
     }
 
-    private void Start()
+    void Start()
     {
         foreach (var item in startingItems)
-        {
             AddItem(item, 1);
-        }
     }
+
     public void AddItem(Item item, int amount = 1)
     {
-        // try to stack first
+        // try stacking first
         foreach (InventorySlot slot in slots)
         {
-            if (slot.item != null && slot.item.itemName == item.itemName && slot.count < item.maxStack)
+            if (slot.item != null &&
+                slot.item.itemName == item.itemName &&
+                slot.count < item.maxStack)
             {
                 int spaceLeft = item.maxStack - slot.count;
                 int toAdd = Mathf.Min(spaceLeft, amount);
+
                 slot.count += toAdd;
                 amount -= toAdd;
 
@@ -72,7 +74,7 @@ public class Inventory : MonoBehaviour
         }
 
         if (amount > 0)
-            Debug.Log("Inventory full! Could not add all items.");
+            Debug.Log("Inventory full — could not add all items.");
 
         ui?.UpdateUI();
     }
@@ -97,30 +99,21 @@ public class Inventory : MonoBehaviour
 
         Item item = slot.item;
 
-
         // SPECIAL UI ITEMS
-
         if (item.type == Item.ItemType.SpecialUI)
         {
             GameObject panel = uiPanelManager.GetPanelForItem(item.itemName);
-
             if (panel != null)
-            {
                 panel.SetActive(true);
-            }
             else
-            {
                 Debug.LogWarning("No panel assigned for " + item.itemName);
-            }
 
             ui?.UpdateUI();
             isUsingItem = false;
             return;
         }
 
-
-        // THROWABLE ITEMS  -  arc projectile - placed object
-
+        // THROWABLE ITEMS
         if (item.type == Item.ItemType.Throwable)
         {
             if (item.projectilePrefab == null || item.placedItemPrefab == null)
@@ -140,25 +133,21 @@ public class Inventory : MonoBehaviour
 
                     Vector2 finalPos = rawPos;
 
-                    // clamp to first wall hit
+                    // check for wall between player and click
                     RaycastHit2D hit = Physics2D.Raycast(origin, dir.normalized, dist, throwBlockMask);
                     if (hit.collider != null)
-                    {
-                        // pull back slightly from wall so it doesn't clip into it
                         finalPos = hit.point - dir.normalized * 0.1f;
-                    }
 
-                    // spawn projectile at player
+                    // spawn projectile
                     GameObject proj = Instantiate(item.projectilePrefab, origin, Quaternion.identity);
                     SFXManager.Instance.PlaySFX(SFXManager.Instance.itemThrow);
 
-                    // initialise arc with the clamped target
-                    LureProjectile lp = proj.GetComponent<LureProjectile>();
-                    lp.Init(finalPos, item.placedItemPrefab);
+                    // initialise arc + spawn placed item on landing
+                    proj.GetComponent<LureProjectile>().Init(finalPos, item.placedItemPrefab);
                 };
             }
 
-            // consume one from the stack
+            // consume item
             slot.count--;
             if (slot.count <= 0) slot.Clear();
             ui?.UpdateUI();
@@ -167,47 +156,35 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-
         // CONSUMABLES (healing items)
-
         if (item.type == Item.ItemType.Consumable)
         {
             HeroHealth health = player.GetComponent<HeroHealth>();
 
-            if (health != null)
+            if (health != null && health.Current < health.maxHearts)
             {
-                if (health.Current < health.maxHearts)
-                {
-                    health.Heal(item.healAmount);
+                health.Heal(item.healAmount);
 
-                    slot.count--;
-                    if (slot.count <= 0) slot.Clear();
+                slot.count--;
+                if (slot.count <= 0) slot.Clear();
 
-                    ui?.UpdateUI();
-                    isUsingItem = false;
-                    return;
-                }
-                else
-                {
-                    Debug.Log("Health full — cannot use item.");
-                    isUsingItem = false;
-                    return;
-                }
+                ui?.UpdateUI();
+                isUsingItem = false;
+                return;
             }
-
-            isUsingItem = false;
-            return;
+            else
+            {
+                Debug.Log("Health full — cannot use item.");
+                isUsingItem = false;
+                return;
+            }
         }
 
-
         // DEFAULT
-
         Debug.Log("Used item: " + item.itemName);
         isUsingItem = false;
     }
 }
-
-
 
 [System.Serializable]
 public class InventorySlot

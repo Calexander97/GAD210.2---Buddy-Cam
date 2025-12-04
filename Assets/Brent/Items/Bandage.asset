@@ -16,6 +16,7 @@ MonoBehaviour:
   icon: {fileID: 5714015020782085360, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
   maxStack: 5
   type: 0
+  description: Heals 2 hitpoints.
   projectilePrefab: {fileID: 0}
   placedItemPrefab: {fileID: 0}
   uiPanel: {fileID: 0}

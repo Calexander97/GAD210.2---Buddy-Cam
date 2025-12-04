@@ -11,6 +11,9 @@ public class Item : ScriptableObject
     public enum ItemType { Consumable, Throwable, Keycard, Tool, SpecialUI }
     public ItemType type;
 
+    [Header("Description")]
+    public string description;
+
     [Header("Throwable Settings")]
     public GameObject projectilePrefab;
     public GameObject placedItemPrefab;

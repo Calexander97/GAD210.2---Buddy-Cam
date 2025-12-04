@@ -16,7 +16,8 @@ MonoBehaviour:
   icon: {fileID: -4406297382807199852, guid: 1cc407be33b10044faef848d35aab2fa, type: 3}
   maxStack: 1
   type: 4
-  throwablePrefab: {fileID: 0}
-  throwForce: 10
-  lifetime: 2
+  description: The codes file downloaded from the terminal.
+  projectilePrefab: {fileID: 0}
+  placedItemPrefab: {fileID: 0}
   uiPanel: {fileID: 0}
+  healAmount: 1

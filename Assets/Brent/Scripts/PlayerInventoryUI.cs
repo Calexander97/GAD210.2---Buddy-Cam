@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +11,17 @@ public class PlayerInventoryUI : MonoBehaviour
     public List<Button> slotButtons;
     public Button useButton;
 
+    // Highlighting
+    [Header("Highlight Colors")]
+    public Color normalSlotColor = Color.white;
+    public Color selectedSlotColor = new Color(0.3f, 0.8f, 1f, 1f);
+
     private int selectedIndex = -1;
     private bool isUsing = false;
 
     void Start()
     {
+        // assign click events to slot buttons
         for (int i = 0; i < slotButtons.Count; i++)
         {
             int index = i;
@@ -33,6 +38,9 @@ public class PlayerInventoryUI : MonoBehaviour
         UpdateUI();
     }
 
+
+    // UI UPDATE
+
     public void UpdateUI()
     {
         for (int i = 0; i < slotButtons.Count; i++)
@@ -43,48 +51,80 @@ public class PlayerInventoryUI : MonoBehaviour
             if (i < inventory.slots.Count && inventory.slots[i].item != null)
             {
                 Item item = inventory.slots[i].item;
+
                 if (iconImage != null)
                 {
                     iconImage.sprite = item.icon;
                     iconImage.enabled = true;
                 }
+
                 if (countText != null)
                 {
-                    countText.text = (item.maxStack > 1) ? inventory.slots[i].count.ToString() : "";
+                    countText.text =
+                        (item.maxStack > 1) ? inventory.slots[i].count.ToString() : "";
                 }
             }
             else
             {
-                if (iconImage != null) { iconImage.sprite = null; iconImage.enabled = false; }
-                if (countText != null) countText.text = "";
+                if (iconImage != null)
+                {
+                    iconImage.sprite = null;
+                    iconImage.enabled = false;
+                }
+
+                if (countText != null)
+                    countText.text = "";
             }
         }
 
-        HighlightSelectedSlot();
+        ApplySlotHighlighting();
     }
+
+
+    // SLOT SELECTION
 
     private void SelectSlot(int index)
     {
         if (index < 0 || index >= inventory.slots.Count) return;
-        if (inventory.slots[index].item == null) return;
+
+        var slot = inventory.slots[index];
+        if (slot.item == null) return;
 
         selectedIndex = index;
+
+        ItemDescriptionUI.Instance.ShowDescription(slot.item);
+
         UpdateUI();
     }
 
-    private void HighlightSelectedSlot()
+
+    // VISUAL HIGHLIGHTING
+
+    private void ApplySlotHighlighting()
     {
         for (int i = 0; i < slotButtons.Count; i++)
         {
-            ColorBlock colors = slotButtons[i].colors;
-            colors.normalColor = (i == selectedIndex) ? new Color(0.3f, 0.8f, 0.3f) : Color.white;
-            slotButtons[i].colors = colors;
+            Image bg = slotButtons[i].GetComponent<Image>();
+            if (bg != null)
+            {
+                bg.color = (i == selectedIndex) ? selectedSlotColor : normalSlotColor;
+            }
         }
     }
 
+
+    public void ClearSelection()
+    {
+        selectedIndex = -1;
+        UpdateUI();
+    }
+
+
+    // USE BUTTON
+
     private void OnUseButtonPressed()
     {
-        if (isUsing) return;  // ignore multiple clicks
+        if (isUsing) return;
         isUsing = true;
 
         if (selectedIndex >= 0 && selectedIndex < inventory.slots.Count)
@@ -96,7 +136,6 @@ public class PlayerInventoryUI : MonoBehaviour
             }
         }
 
-        // wait before allowing another click
         StartCoroutine(ReenableUseButton());
     }
 
