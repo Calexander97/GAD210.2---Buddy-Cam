@@ -140,7 +140,7 @@ public class Inventory : MonoBehaviour
 
                     // spawn projectile
                     GameObject proj = Instantiate(item.projectilePrefab, origin, Quaternion.identity);
-                    SFXManager.Instance.PlaySFX(SFXManager.Instance.itemThrow);
+                    SFXManager.Instance.PlayThrow();
 
                     // initialise arc + spawn placed item on landing
                     proj.GetComponent<LureProjectile>().Init(finalPos, item.placedItemPrefab);

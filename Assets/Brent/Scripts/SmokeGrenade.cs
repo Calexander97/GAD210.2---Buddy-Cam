@@ -26,7 +26,7 @@ public class SmokeGrenade : MonoBehaviour
 
     void PlaySFX()
     {
-        SFXManager.Instance.PlaySFX(activateSFX);
+        SFXManager.Instance.PlaySmoke();
     }
 
     void Detonate()
