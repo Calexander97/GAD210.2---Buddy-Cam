@@ -1,10 +1,54 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [DefaultExecutionOrder(-1000)]
 public class AlertManager : MonoBehaviour
+
 {
+    [HeaderAttribute("Noise -> Guard Investigate")]
+    public float baseNoiseRadius = 10f;         // loudnesss =1 =/ this radius
+    public bool useOcclusion = false;
+    public LayerMask occluderMask;             // e.g., Walls
+
+    void onEnable() { NoiseSystem.OnNoise += HandleNoise; }
+    void onDisable() { NoiseSystem.OnNoise -= HandleNoise; }
+
+    void HandleNoise(Vector2 pos, float loudness)
+    {
+        if (_guards == null || _guards.Count == 0) return;
+
+        float radius = Mathf.Max(0.1f, baseNoiseRadius * loudness);
+
+        for (int i = 0; i < _guards.Count; i++)
+        {
+            var g = _guards[i];
+            if (!g || !g.isActiveAndEnabled) continue;
+
+            // Don't override a live chase
+            if (g.state == GuardAI.State.Alerted) continue;
+
+            // Range check
+            var gp = (Vector2)g.transform.position;
+            if (Vector2.Distance(gp, pos) > radius) continue;
+
+            // Optional: simple LOS occlusion
+            if (useOcclusion)
+            {
+                var hit = Physics2D.Raycast(gp, (pos - gp).normalized,
+                                Vector2.Distance(gp, pos), occluderMask);
+                if (hit.collider) continue; // Blocked by wall
+            }
+
+            // Lure noise should not chain radios -> relayEligible: false
+            g.BeginInvestigateExternal(pos, relayEligible: false);
+        }
+
+        if (verboseLogging)
+            Debug.Log($"[Noise] {pos} r≈{radius:0.0} (loudness {loudness:0.00})");
+    }
+
     private static AlertManager _instance;
     public static AlertManager Instance
     {

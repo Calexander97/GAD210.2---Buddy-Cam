@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -2251850929593402692}
   - component: {fileID: -4608781778232491207}
   - component: {fileID: -6671044333136754183}
+  - component: {fileID: -8132392791226281339}
   m_Layer: 0
   m_Name: Lure
   m_TagString: Untagged
@@ -151,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea656ce4580e1344c8bfbff6ad59abb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lure
-  loudness: 1
+  loudness: 0.3
   pulseInterval: 1
   active: 1
 --- !u!114 &-6671044333136754183
@@ -166,3 +167,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220d785313a44394ab3578e66e5402b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LureDisableTrigger
+--- !u!114 &-8132392791226281339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5191764969934464164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c38bdd0a4ae9cd469b7897248861b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NoiseEmitter
+  emitOnMove: 0
+  stepLoudness: 1
+  stepInterval: 0.35
+  minSpeedForSteps: 0.2
