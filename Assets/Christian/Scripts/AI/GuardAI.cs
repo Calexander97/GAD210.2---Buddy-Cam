@@ -56,15 +56,23 @@ public class GuardAI : MonoBehaviour
     float lostSightTimer;
     float searchTimer;
     float totalSearchTime;
-    Vector2 searchCenter;          // fixed LKP for the current Investigate
-    bool goingToLKP = false;       // first phase of Investigate: move to exact LKP
+    Vector2 searchCenter;              // fixed LKP for current Investigate
+    bool goingToLKP = false;           // phase 1 of Investigate: go to exact LKP
 
     HeroHealth targetHealth;
     Transform lastTarget;
     Vector2 lastFacingDir = Vector2.right;
     float ignorePerceptionUntil = 0f;
 
-    // Edge detect for LOS → triggers radio once per loss event
+    // Radio control
+    bool canRelayThisPursuit = true;   // true for original spotter; false for radioed-in guards
+    bool radioSentThisInvestigate = false; // ensure only one radio per Investigate
+
+    // Alarm response
+    AlarmBox pendingAlarm;
+    bool isAlarmPrimary = false;
+
+    // LOS edge detect
     bool hadLOSLastFrame = false;
 
     void OnEnable() { AlertManager.Instance.Register(this); }
@@ -119,19 +127,21 @@ public class GuardAI : MonoBehaviour
         Face();
     }
 
-    // ── Patrol ──────────────────────────────────────────────────────────────────
+    // PATROL
     void TickPatrol()
     {
         if (profile) agent.speed = profile.patrolSpeed;
         if (patrolPoints == null || patrolPoints.Length == 0) return;
 
-        // Immediate switch to Alerted when we see the target (unless calming down)
+        // See target → Alerted immediately (unless calming)
         if (sensors.targetVisible && Time.time >= ignorePerceptionUntil)
         {
             state = State.Alerted;
             if (profile) agent.speed = profile.chaseSpeed;
             lostSightTimer = 0f;
-            hadLOSLastFrame = true; // we are starting Alerted with LOS
+            hadLOSLastFrame = true;
+            canRelayThisPursuit = true;       // original spotter can relay
+            radioSentThisInvestigate = false; // reset any residual
             return;
         }
 
@@ -142,7 +152,7 @@ public class GuardAI : MonoBehaviour
         }
     }
 
-    // ── Alerted ─────────────────────────────────────────────────────────────────
+    // ALERTED
     void TickAlerted()
     {
         if (profile) agent.speed = profile.chaseSpeed;
@@ -150,29 +160,32 @@ public class GuardAI : MonoBehaviour
         var tgt = sensors ? sensors.target : null;
         if (!tgt || TargetIsDead())
         {
-            // Clean break: hero gone / dead
             state = State.Patrol;
             agent.ResetPath();
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
             ignorePerceptionUntil = Time.time + postKillCalm;
             hadLOSLastFrame = false;
+            radioSentThisInvestigate = false;
             return;
         }
 
         bool inLOS = sensors.targetVisible;
 
-        // EDGE: just lost LOS → broadcast immediately and head to LKP
+        // EDGE: just lost LOS → immediately broadcast and head to LKP
         if (!inLOS && hadLOSLastFrame)
         {
-            AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
-            if (radioIcon) StartCoroutine(RadioFlash());
-            lostSightTimer = 0f; // start grace period from this instant
+            if (canRelayThisPursuit)          // only the original spotter relays (unless manager allows chaining)
+            {
+                AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
+                if (radioIcon) StartCoroutine(RadioFlash());
+            }
+            lostSightTimer = 0f;
         }
 
         if (inLOS)
         {
-            // Maintain a standoff band (simple approach/hold/backoff).
+            // Simple standoff band
             Vector2 guardPos = transform.position;
             Vector2 targetPos = tgt.position;
             Vector2 to = targetPos - guardPos;
@@ -201,11 +214,11 @@ public class GuardAI : MonoBehaviour
                 if (agent.hasPath) agent.ResetPath();
             }
 
-            lostSightTimer = 0f; // reset grace while visible
+            lostSightTimer = 0f; // reset grace
         }
         else
         {
-            // While we’re in grace, keep moving to the exact LKP
+            // Lost sight → push toward LKP
             lostSightTimer += Time.deltaTime;
             Vector3 lkp = sensors.lastSeenPos;
 
@@ -213,23 +226,29 @@ public class GuardAI : MonoBehaviour
             if (!agent.pathPending && Vector3.Distance(agent.destination, lkp) > 0.05f)
                 agent.SetDestination(lkp);
 
-            // After grace, switch to Investigate (random search around that same LKP)
+            // After grace, enter Investigate; optionally (manager/flag) relay once
             if (lostSightTimer >= lostSightGrace)
             {
                 BeginInvestigate(sensors.lastSeenPos);
+
+                if (!radioSentThisInvestigate && canRelayThisPursuit)
+                {
+                    radioSentThisInvestigate = true;
+                    AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
+                    if (radioIcon) StartCoroutine(RadioFlash());
+                }
             }
         }
 
-        // Store for next frame’s edge detection
         hadLOSLastFrame = inLOS;
     }
 
-    // ── Investigate ─────────────────────────────────────────────────────────────
+    // INVESTIGATE
     void TickInvestigate()
     {
         if (profile) agent.speed = profile.patrolSpeed;
 
-        // Regain LOS → switch back to Alerted (unless in calm)
+        // Regain LOS → back to Alerted
         if (sensors.targetVisible && Time.time >= ignorePerceptionUntil)
         {
             state = State.Alerted;
@@ -240,14 +259,22 @@ public class GuardAI : MonoBehaviour
 
         totalSearchTime += Time.deltaTime;
 
-        // Phase 1: go to exact LKP, then begin local search
+        // Phase 1 → reach exact LKP
         if (goingToLKP)
         {
             if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
             {
                 goingToLKP = false;
+
+                // If responding to alarm and I'm primary, clear it now
+                if (pendingAlarm && isAlarmPrimary && pendingAlarm.isActive)
+                {
+                    pendingAlarm.ClearAlarm();
+                }
+
+                isAlarmPrimary = false;
                 searchTimer = 0f;
-                PickNewSearchPoint(); // first random spot around fixed searchCenter
+                PickNewSearchPoint();
             }
             else
             {
@@ -257,7 +284,7 @@ public class GuardAI : MonoBehaviour
         }
         else
         {
-            // Phase 2: random local search around the LKP
+            // Phase 2 → wander around LKP
             if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
             {
                 searchTimer += Time.deltaTime;
@@ -272,23 +299,24 @@ public class GuardAI : MonoBehaviour
         if (totalSearchTime >= searchTime)
         {
             state = State.Patrol;
+            radioSentThisInvestigate = false;
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
             hadLOSLastFrame = false;
         }
     }
 
-    // ── Transitions / helpers ───────────────────────────────────────────────────
+    // Transitions / helpers
     void BeginInvestigate(Vector2 center)
     {
         state = State.Investigate;
-        searchCenter = center;     // lock the LKP once per investigate
+        searchCenter = center;
         searchTimer = 0f;
         totalSearchTime = 0f;
         goingToLKP = true;
         agent.isStopped = false;
         agent.SetDestination((Vector3)searchCenter);
-        hadLOSLastFrame = false;   // we are entering search without LOS
+        hadLOSLastFrame = false;
     }
 
     void PickNewSearchPoint()
@@ -307,7 +335,7 @@ public class GuardAI : MonoBehaviour
         return !targetHealth || targetHealth.Current <= 0 || !targetHealth.gameObject.activeInHierarchy;
     }
 
-    // ── Facing ──────────────────────────────────────────────────────────────────
+    // Facing
     void Face()
     {
         Vector2 desired;
@@ -332,7 +360,7 @@ public class GuardAI : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, goal, turnSpeed * Time.deltaTime);
     }
 
-    // ── Health wiring ───────────────────────────────────────────────────────────
+    // Health wiring
     void OnTargetDied()
     {
         ignorePerceptionUntil = Time.time + postKillCalm;
@@ -352,11 +380,24 @@ public class GuardAI : MonoBehaviour
         }
     }
 
-    // Called by AlertManager so other guards can join the search.
-    public void BeginInvestigateExternal(Vector2 center)
+    // External triggers
+    public void BeginInvestigateExternal(Vector2 center, bool relayEligible)
     {
-        if (state == State.Alerted) return; // keep chasing if we already have LOS
+        if (state == State.Alerted) return; // if actively chasing, don't override
         BeginInvestigate(center);
+        radioSentThisInvestigate = false;
+        canRelayThisPursuit = relayEligible;
+    }
+
+    public void RespondToAlarm(AlarmBox box, bool primary, bool allowRelay)
+    {
+        if (!box) return;
+
+        pendingAlarm = box;
+        isAlarmPrimary = primary;
+        canRelayThisPursuit = allowRelay;
+
+        BeginInvestigate(box.transform.position);
     }
 
     IEnumerator RadioFlash()
