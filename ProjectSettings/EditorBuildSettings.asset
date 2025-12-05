@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Christian/Scenes/Develop-Christian.unity
     guid: ad5b1ddbceefb594b805d495a8114304
   - enabled: 1
+    path: Assets/Christian/Scenes/Menu.unity
+    guid: c44e6ddff1b8dc14dae29786b6161725
+  - enabled: 1
     path: Assets/Christian/Scenes/MainGameWorld -Brent 2.unity
     guid: 20fa44ace668e1e4fbb20a2c2b486347
   m_configObjects: {}

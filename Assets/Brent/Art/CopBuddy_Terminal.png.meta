@@ -186,7 +186,7 @@ TextureImporter:
         height: 701
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 77, y: 64, z: 73, w: 85}
       customData: 
       outline: []
       physicsShape: []
@@ -392,50 +392,6 @@ TextureImporter:
       bones: []
       spriteID: d614e4a1d8af2ff60800000000000000
       internalID: 8066785366512648557
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CopBuddy_Terminal_12
-      rect:
-        serializedVersion: 2
-        x: 2036
-        y: 1435
-        width: 325
-        height: 566
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da57de3b8dc8c4347bf040c95880df94
-      internalID: 2120550119
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CopBuddy_Terminal_13
-      rect:
-        serializedVersion: 2
-        x: 1996
-        y: 1395
-        width: 411
-        height: 653
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2476e419eb5a7884088d9dd6ff7d8cd0
-      internalID: -650059781
       vertices: []
       indices: 
       edges: []
