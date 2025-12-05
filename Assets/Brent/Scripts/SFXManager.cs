@@ -29,6 +29,9 @@ public class SFXManager : MonoBehaviour
     public AudioClip lureActivate;
     [Range(0f, 1f)] public float lureVolume = 1f;
 
+    public AudioClip startMenuClick;
+    [Range(0f, 1f)] public float startMenuClickVolume = 1f;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -54,4 +57,5 @@ public class SFXManager : MonoBehaviour
     public void PlayPickup() => Play(pickupItem, pickupVolume);
     public void PlaySmoke() => Play(smokeActivate, smokeVolume);
     public void PlayLure() => Play(lureActivate, lureVolume);
+    public void PlayStartMenuClick() => Play(startMenuClick, startMenuClickVolume);
 }
