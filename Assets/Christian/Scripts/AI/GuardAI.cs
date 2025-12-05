@@ -13,6 +13,10 @@ public class GuardAI : MonoBehaviour
     [Header("Patrol")]
     public Transform[] patrolPoints;
     public float waypointTolerance = 0.15f;
+    [Tooltip("Enable waiting at each waypoint before moving on.")]
+    public bool dwellAtPatrolPoints = true;
+    [Tooltip("Random wait time range at each patrol point (seconds).")]
+    public Vector2 patrolDwellRange = new Vector2(0f, 0f); // e.g., (1, 5)
 
     public enum EngageStyle { Shooter, Melee }
 
@@ -69,6 +73,8 @@ public class GuardAI : MonoBehaviour
     // Internals
     NavMeshAgent agent;
     int patrolIndex;
+    bool dwellingAtWaypoint = false;
+    float patrolDwellTimer = 0f;
     float lostSightTimer;
     float searchTimer;
     float totalSearchTime;
@@ -106,7 +112,12 @@ public class GuardAI : MonoBehaviour
         agent.updateUpAxis = false;
         agent.updateRotation = false;
         if (!sensors) sensors = GetComponent<GuardSensors>();
+
+        // Guards should NOT broadcast footstep noise
+        var ne = GetComponent<NoiseEmitter>();
+        if (ne) ne.emitOnMove = false;
     }
+
 
     void Start()
     {
@@ -153,11 +164,20 @@ public class GuardAI : MonoBehaviour
     void TickPatrol()
     {
         if (profile) agent.speed = profile.patrolSpeed;
+
+        // Ensure movement isn't paused by any previous state
+        agent.isStopped = false;
+        agent.stoppingDistance = 0f;
+
         if (patrolPoints == null || patrolPoints.Length == 0) return;
 
-        // See target → Alerted immediately (unless calming)
+        // Vision -> Alerted
         if (sensors.targetVisible && Time.time >= ignorePerceptionUntil)
         {
+            // break any dwell immediately
+            dwellingAtWaypoint = false;
+            patrolDwellTimer = 0f;
+
             state = State.Alerted;
             if (profile) agent.speed = profile.chaseSpeed;
             lostSightTimer = 0f;
@@ -166,8 +186,7 @@ public class GuardAI : MonoBehaviour
             radioSentThisInvestigate = false;
             meleeSightPingSent = false;
 
-            // Optional: melee pings radio immediately on first sight
-            if (engageStyle == EngageStyle.Melee && radioOnSightForMelee && canRelayThisPursuit && !meleeSightPingSent)
+            if (engageStyle == EngageStyle.Melee && radioOnSightForMelee && canRelayThisPursuit)
             {
                 AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
                 if (radioIcon) StartCoroutine(RadioFlash());
@@ -176,12 +195,44 @@ public class GuardAI : MonoBehaviour
             return;
         }
 
+        // If we don't have a path yet (e.g., on start), set the first destination
+        if (!agent.hasPath && patrolPoints.Length > 0)
+            agent.SetDestination(patrolPoints[patrolIndex].position);
+
+        // Handle dwell at waypoint
         if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
         {
+            if (!dwellingAtWaypoint && dwellAtPatrolPoints && patrolDwellRange.y > 0f)
+            {
+                // Start a dwell using a clamped, sensible range
+                float min = Mathf.Max(0f, Mathf.Min(patrolDwellRange.x, patrolDwellRange.y));
+                float max = Mathf.Max(min, patrolDwellRange.y);
+                patrolDwellTimer = Random.Range(min, max);
+
+                if (patrolDwellTimer > 0f)
+                {
+                    dwellingAtWaypoint = true;
+                    agent.isStopped = true;
+                    return;
+                }
+            }
+
+            if (dwellingAtWaypoint)
+            {
+                patrolDwellTimer -= Time.deltaTime;
+                if (patrolDwellTimer > 0f) return;
+
+                // dwell finished
+                dwellingAtWaypoint = false;
+                agent.isStopped = false;
+            }
+
+            // Advance to next waypoint
             patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
             agent.SetDestination(patrolPoints[patrolIndex].position);
         }
     }
+
 
     // ───────────────────────────────── ALERTED
     void TickAlerted()
