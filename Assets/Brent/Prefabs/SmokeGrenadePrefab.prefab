@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SmokeGrenade
   fuseTime: 1
-  smokeCloudPrefab: {fileID: 1211841002290735418, guid: b2e41f08956605e489a39b466933b849, type: 3}
+  smokeCloudPrefab: {fileID: 3859962694528158363, guid: df0ab0145a797994787a846145d111d3, type: 3}
   smokeDuration: 10
   activateSFX: {fileID: 8300000, guid: 32f3e97b6ddbb4f4f90d64f717081b2b, type: 3}
   sfxLeadTime: 0.2
