@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using UnityEngine;
-using UnityEngine.AI;                 // NavMeshAgent + NavMesh.SamplePosition
+﻿using UnityEngine;
+using UnityEngine.AI;                 // NavMeshAgent, NavMesh.SamplePosition
 using NavMeshPlus.Components;         // NavMeshSurface (NavMeshPlus)
 using UnityEngine.UI;                 // Button
 using TMPro;                          // TMP_Text
@@ -14,12 +13,12 @@ public class LevelManager : MonoBehaviour
         public GameObject root;            // e.g., Floor_01 / Floor_02 / Floor_03
 
         [Header("Navigation")]
-        public NavMeshSurface surface;     // Pre-baked NavMeshPlus surface (enabled/disabled)
+        public NavMeshSurface surface;     // Pre-baked NavMeshPlus surface (runtime add/remove)
 
         [Header("Spawning")]
-        public Transform spawn;            // Default spawn for this floor (optional)
+        public Transform defaultSpawn;     // Default spawn for this floor (optional)
 
-        [Header("Optional Auto-Find (under root)")]
+        [Header("Optional Auto-Find")]
         public Camera[] cameras;           // If empty, auto-find under root
         public GuardAI[] guards;           // If empty, auto-find under root
     }
@@ -32,100 +31,121 @@ public class LevelManager : MonoBehaviour
     [Header("Floors (order = progression)")]
     public FloorSet[] floors;
 
-    [Header("Boot Start")]
-    [Tooltip("Which floor to load at startup.")]
-    public int bootFloorIndex = 0;
+    [Header("Boot Options")]
+    [Tooltip("If set, hero will be warped here once on Start, before first floor switch.")]
+    public Transform bootStartPoint;
 
-    [Tooltip("Optional: where to place the hero at startup (used only once on boot).")]
-    public Transform bootSpawnOverride;
-
-    [Header("Options")]
+    [Header("Switching")]
+    [Tooltip("If < 0, first floor is selected at Start.")]
+    public int currentIndex = -1;
     [Tooltip("Snap hero onto mesh within this radius when switching floors.")]
     public float warpSampleRadius = 2f;
+    [Tooltip("If true, only guards on the active floor are enabled.")]
+    public bool autoEnableOnlyCurrentFloorGuards = true;
 
     [Header("Camera UI (optional)")]
+    [Tooltip("Prev/Next camera buttons (optional).")]
     public Button prevCameraButton;
     public Button nextCameraButton;
-    public Button[] cameraIndexButtons;    // e.g., 4 buttons for Cam1..Cam4
-    public TMP_Text[] cameraButtonTMP;     // labels for those buttons (optional)
+    [Tooltip("Direct index buttons (e.g., 4 buttons for Cam1..Cam4).")]
+    public Button[] cameraIndexButtons;
+    [Tooltip("Optional labels for the index buttons (one per button).")]
+    public TMP_Text[] cameraButtonTMP;
 
-    // ─────────────────────────────────────────────────────────────────────────────
+    // ─── Runtime tracking of currently loaded navmesh surface instance ───
+    NavMeshSurface _activeSurface;
 
     void Awake()
     {
         // Hide all floors at boot; the active one is enabled on SwitchToFloor.
         if (floors == null) return;
         for (int i = 0; i < floors.Length; i++)
+        {
             if (floors[i] != null && floors[i].root != null)
                 floors[i].root.SetActive(false);
+        }
+    }
+
+    void OnEnable()
+    {
+        // If menus/UI disabled components and dropped the navmesh handle,
+        // re-ensure the current floor’s surface is loaded.
+        EnsureActiveSurfaceLoaded();
     }
 
     void Start()
     {
+        if (!hero || !heroAgent) return;
+        heroAgent.updateUpAxis = false;
+        heroAgent.updateRotation = false;
+
+        // Optional one-time boot placement before switching floors
+        if (bootStartPoint)
+        {
+            heroAgent.enabled = false;
+            var dest = bootStartPoint.position;
+            if (NavMesh.SamplePosition(dest, out var bootHit, warpSampleRadius, NavMesh.AllAreas))
+                dest = bootHit.position;
+            hero.position = dest;
+            heroAgent.Warp(dest);
+            heroAgent.enabled = true;
+        }
+
         if (floors == null || floors.Length == 0) return;
 
-        // Use the bootFloorIndex and (optional) bootSpawnOverride exactly once at startup.
-        var idx = Mathf.Clamp(bootFloorIndex, 0, floors.Length - 1);
-        SwitchToFloor(idx, bootSpawnOverride);
-
-        ValidateGuardsUnderRoots(); // editor-time helper
+        if (currentIndex < 0) SwitchToFloor(0); // default to first
+        else SwitchToFloor(Mathf.Clamp(currentIndex, 0, floors.Length - 1));
     }
 
-    public void NextFloor() => SwitchToFloor(Mathf.Clamp(GetCurrentIndex() + 1, 0, floors.Length - 1));
-    public void PrevFloor() => SwitchToFloor(Mathf.Clamp(GetCurrentIndex() - 1, 0, floors.Length - 1));
+    public void NextFloor() => SwitchToFloor(Mathf.Clamp(currentIndex + 1, 0, floors.Length - 1));
+    public void PrevFloor() => SwitchToFloor(Mathf.Clamp(currentIndex - 1, 0, floors.Length - 1));
 
-    int GetCurrentIndex()
-    {
-        // Determine which root is currently active
-        if (floors == null) return 0;
-        for (int i = 0; i < floors.Length; i++)
-            if (floors[i]?.root && floors[i].root.activeSelf) return i;
-        return 0;
-    }
-
-    // ───────────────────────────── Switch (no explicit spawn) ────────────────────
+    // ────────── Switch (no explicit spawn) ──────────
     public void SwitchToFloor(int index) => SwitchToFloor(index, (Transform)null);
 
-    // ───────────────────────────── Switch (with spawn Transform) ─────────────────
+    // ────────── Switch (with explicit spawn Transform) ──────────
     public void SwitchToFloor(int index, Transform spawnOverride)
     {
         if (floors == null || index < 0 || index >= floors.Length) return;
 
-        // Deactivate all floors first (keeps logic simple)
-        for (int i = 0; i < floors.Length; i++)
+        // Unload previous floor’s navmesh data, disable its root
+        if (currentIndex >= 0 && currentIndex < floors.Length)
         {
-            var f = floors[i];
-            if (f == null) continue;
-            if (f.surface) f.surface.enabled = false;
-            if (f.root) f.root.SetActive(false);
+            var old = floors[currentIndex];
+            if (old != null)
+            {
+                if (old.surface) UnloadSurface(old.surface);
+                if (old.root) old.root.SetActive(false);
+            }
         }
 
-        // Activate target floor
-        var floor = floors[index];
-        if (floor == null || !floor.root)
+        // Activate new floor
+        var f = floors[index];
+        if (f == null || !f.root)
         {
             Debug.LogWarning("LevelManager: Floor root missing.");
             return;
         }
 
-        floor.root.SetActive(true);
+        f.root.SetActive(true);
+        currentIndex = index;
 
-        // Ensure refs (auto-find where needed under the floor root)
-        var surface = ResolveSurface(floor);
-        var cams = (floor.cameras != null && floor.cameras.Length > 0)
-                    ? floor.cameras
-                    : floor.root.GetComponentsInChildren<Camera>(true);
+        // Ensure refs (auto-find where needed)
+        var surface = ResolveSurface(f);
+        var cams = (f.cameras != null && f.cameras.Length > 0)
+                    ? f.cameras
+                    : f.root.GetComponentsInChildren<Camera>(true);
 
-        var guards = (floor.guards != null && floor.guards.Length > 0)
-                    ? floor.guards
-                    : floor.root.GetComponentsInChildren<GuardAI>(true);
+        var guards = (f.guards != null && f.guards.Length > 0)
+                    ? f.guards
+                    : f.root.GetComponentsInChildren<GuardAI>(true);
 
-        var spawn = spawnOverride ? spawnOverride : floor.spawn; // bootSpawnOverride is only passed in from Start()
+        var spawn = spawnOverride ? spawnOverride : f.defaultSpawn;
 
-        // Enable surface (adds pre-baked data)
-        if (surface) surface.enabled = true;
+        // Load only this floor’s baked data (no global clears)
+        if (surface) LoadSurface(surface);
 
-        // Place hero (snap to mesh if possible)
+        // Place hero and re-warp on the (re)loaded mesh
         if (hero && heroAgent)
         {
             heroAgent.enabled = false;
@@ -139,18 +159,34 @@ public class LevelManager : MonoBehaviour
             heroAgent.enabled = true;
         }
 
-        // Feed cameras into the single feed switcher
+        // Feed cameras to single feed switcher and retag active
         if (switcher != null && cams != null && cams.Length > 0)
         {
             switcher.cams = cams;
             switcher.SetActiveCamera(0, true);
-            WireCameraButtons(cams); // update UI hooks if assigned
+            RetagActiveCamera(cams, 0);
+            WireCameraButtons(cams);
         }
 
-        // Guards: nothing to do here—since they live under the floor root, toggling the root handles them.
+        // Enable only this floor’s guards (optional)
+        if (autoEnableOnlyCurrentFloorGuards)
+        {
+            // Disable all guards first
+            for (int i = 0; i < floors.Length; i++)
+            {
+                if (!floors[i]?.root) continue;
+                foreach (var g in floors[i].root.GetComponentsInChildren<GuardAI>(true))
+                    if (g) g.gameObject.SetActive(false);
+            }
+
+            // Enable current floor guards
+            if (guards != null)
+                foreach (var g in guards)
+                    if (g) g.gameObject.SetActive(true);
+        }
     }
 
-    // ───────────────────────────────────── Helpers ───────────────────────────────
+    // ─────────────────────────── Helpers ───────────────────────────
 
     NavMeshSurface ResolveSurface(FloorSet f)
     {
@@ -160,28 +196,96 @@ public class LevelManager : MonoBehaviour
         return s;
     }
 
+    void LoadSurface(NavMeshSurface s)
+    {
+        if (!s) return;
+
+        try
+        {
+            s.RemoveData();   // safe if none yet
+            s.AddData();      // uses pre-baked data
+        }
+        catch
+        {
+            // Fallback path if runtime AddData/RemoveData isn’t available
+            s.enabled = false;
+            s.enabled = true;
+            s.BuildNavMesh();
+        }
+
+        _activeSurface = s;
+    }
+
+    void UnloadSurface(NavMeshSurface s)
+    {
+        if (!s) return;
+        try
+        {
+            s.RemoveData();
+        }
+        catch
+        {
+            s.enabled = false;
+        }
+
+        if (_activeSurface == s) _activeSurface = null;
+    }
+
+    void EnsureActiveSurfaceLoaded()
+    {
+        if (_activeSurface == null) return;
+
+        try
+        {
+            _activeSurface.RemoveData();
+            _activeSurface.AddData();
+        }
+        catch
+        {
+            _activeSurface.enabled = false;
+            _activeSurface.enabled = true;
+            _activeSurface.BuildNavMesh();
+        }
+    }
+
+    void RetagActiveCamera(Camera[] cams, int activeIndex)
+    {
+        // Keep only the active cam tagged as MainCamera to avoid input/raycast ambiguity
+        for (int i = 0; i < cams.Length; i++)
+        {
+            if (!cams[i]) continue;
+            cams[i].tag = (i == activeIndex) ? "MainCamera" : "Untagged";
+        }
+    }
+
     void WireCameraButtons(Camera[] cams)
     {
         if (switcher == null) return;
 
         bool hasMultiple = cams != null && cams.Length > 1;
 
-        // Prev / Next
         if (prevCameraButton)
         {
             prevCameraButton.onClick.RemoveAllListeners();
-            prevCameraButton.onClick.AddListener(() => switcher.PrevCamera());
+            prevCameraButton.onClick.AddListener(() =>
+            {
+                switcher.PrevCamera();
+                RetagActiveCamera(cams, switcher.activeIndex);
+            });
             prevCameraButton.gameObject.SetActive(hasMultiple);
         }
 
         if (nextCameraButton)
         {
             nextCameraButton.onClick.RemoveAllListeners();
-            nextCameraButton.onClick.AddListener(() => switcher.NextCamera());
+            nextCameraButton.onClick.AddListener(() =>
+            {
+                switcher.NextCamera();
+                RetagActiveCamera(cams, switcher.activeIndex);
+            });
             nextCameraButton.gameObject.SetActive(hasMultiple);
         }
 
-        // Direct index buttons
         if (cameraIndexButtons == null) return;
 
         for (int i = 0; i < cameraIndexButtons.Length; i++)
@@ -196,7 +300,11 @@ public class LevelManager : MonoBehaviour
             if (show)
             {
                 int idx = i; // capture
-                btn.onClick.AddListener(() => switcher.SetActiveCamera(idx));
+                btn.onClick.AddListener(() =>
+                {
+                    switcher.SetActiveCamera(idx);
+                    RetagActiveCamera(cams, idx);
+                });
 
                 // Optional TMP label
                 if (cameraButtonTMP != null && i < cameraButtonTMP.Length && cameraButtonTMP[i])
@@ -212,36 +320,5 @@ public class LevelManager : MonoBehaviour
                     cameraButtonTMP[i].text = string.Empty;
             }
         }
-    }
-
-    // Editor helper: warn if any GuardAI isn’t under a floor root.
-    void ValidateGuardsUnderRoots()
-    {
-#if UNITY_EDITOR
-        if (floors == null || floors.Length == 0) return;
-
-        var floorRoots = floors.Where(f => f != null && f.root != null)
-                               .Select(f => f.root.transform)
-                               .ToArray();
-
-        var allGuards = FindObjectsOfType<GuardAI>(true);
-        foreach (var g in allGuards)
-        {
-            if (!g) continue;
-            Transform t = g.transform;
-            bool underAnyRoot = false;
-            while (t != null)
-            {
-                if (floorRoots.Contains(t)) { underAnyRoot = true; break; }
-                t = t.parent;
-            }
-            if (!underAnyRoot)
-            {
-                Debug.LogWarning($"[LevelManager] Guard '{g.name}' is not under any Floor root. " +
-                                 "Move it under the correct Floor_X root so it toggles with floors.",
-                                 g);
-            }
-        }
-#endif
     }
 }
