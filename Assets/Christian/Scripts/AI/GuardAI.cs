@@ -31,6 +31,8 @@ public class GuardAI : MonoBehaviour
     public float searchRadius = 2.0f;
     [Tooltip("Total time to search before returning to patrol.")]
     public float searchTime = 6.0f;
+    float currentSearchTime;          // how long this investigate lasts
+    float arriveRadiusCurrent = -1f;  // how close counts as "arrived" at the center
 
     [Header("Facing")]
     public bool forwardIsUp = true;
@@ -46,6 +48,10 @@ public class GuardAI : MonoBehaviour
     [Tooltip("Optional icon shown briefly when broadcasting.")]
     public GameObject radioIcon;
     public float radioPingDuration = 3f;
+
+    [Header("Alarm Handling")]
+    [Tooltip("Distance within which a guard can 'reach' and clear the alarm.")]
+    public float alarmClearRange = 0.9f;
 
     public enum State { Patrol, Alerted, Investigate }
     public State state = State.Patrol;
@@ -160,13 +166,16 @@ public class GuardAI : MonoBehaviour
         var tgt = sensors ? sensors.target : null;
         if (!tgt || TargetIsDead())
         {
+            // Before patrolling, make sure the alarm is handled.
+            if (EnsureAlarmClearedOrKeepGoing()) return;
+
             state = State.Patrol;
             agent.ResetPath();
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
             ignorePerceptionUntil = Time.time + postKillCalm;
             hadLOSLastFrame = false;
-            radioSentThisInvestigate = false;
+            //radioSentThisInvestigate = false;
             return;
         }
 
@@ -262,15 +271,14 @@ public class GuardAI : MonoBehaviour
         // Phase 1 → reach exact LKP
         if (goingToLKP)
         {
-            if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
+            float arrive = (arriveRadiusCurrent > 0f) ? arriveRadiusCurrent : waypointTolerance;
+
+            if (!agent.pathPending && agent.remainingDistance <= arrive)   // <-- use 'arrive' here
             {
                 goingToLKP = false;
 
-                // If responding to alarm and I'm primary, clear it now
                 if (pendingAlarm && isAlarmPrimary && pendingAlarm.isActive)
-                {
                     pendingAlarm.ClearAlarm();
-                }
 
                 isAlarmPrimary = false;
                 searchTimer = 0f;
@@ -282,6 +290,7 @@ public class GuardAI : MonoBehaviour
                     agent.SetDestination((Vector3)searchCenter);
             }
         }
+
         else
         {
             // Phase 2 → wander around LKP
@@ -296,10 +305,13 @@ public class GuardAI : MonoBehaviour
             }
         }
 
-        if (totalSearchTime >= searchTime)
+        if (totalSearchTime >=currentSearchTime)
         {
+            // Try to clear the alarm before giving up to Patrol.
+            if (EnsureAlarmClearedOrKeepGoing()) return;
+
             state = State.Patrol;
-            radioSentThisInvestigate = false;
+            //radioSentThisInvestigate = false;
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
             hadLOSLastFrame = false;
@@ -309,14 +321,31 @@ public class GuardAI : MonoBehaviour
     // Transitions / helpers
     void BeginInvestigate(Vector2 center)
     {
+        BeginInvestigate(center, null, null);
+    }
+    void BeginInvestigate(Vector2 center, float? timeOverride, float? arriveRadiusOverride)
+    {
         state = State.Investigate;
         searchCenter = center;
         searchTimer = 0f;
         totalSearchTime = 0f;
         goingToLKP = true;
         agent.isStopped = false;
+
+        currentSearchTime = timeOverride ?? searchTime;
+        arriveRadiusCurrent = arriveRadiusOverride ?? waypointTolerance;
+
         agent.SetDestination((Vector3)searchCenter);
         hadLOSLastFrame = false;
+    }
+
+    public void InvestigateNoise(Vector2 pingPos, float duration, float arriveRadius)
+    {
+        // Dont override an eyes-on chase
+        if (state == State.Alerted && sensors && sensors.targetVisible) return;
+        BeginInvestigate(pingPos, duration, arriveRadius);
+        // Noise pings shouldn't chain radios
+        canRelayThisPursuit = false;
     }
 
     void PickNewSearchPoint()
@@ -398,6 +427,24 @@ public class GuardAI : MonoBehaviour
         canRelayThisPursuit = allowRelay;
 
         BeginInvestigate(box.transform.position);
+    }
+
+    bool EnsureAlarmClearedOrKeepGoing()
+    {
+        // If there's an active alarm, try to clear it before giving up
+        if (pendingAlarm && pendingAlarm.isActive)
+        {
+            float d = Vector2.Distance(transform.position, pendingAlarm.transform.position);
+
+            if (d <= alarmClearRange)
+            {
+                pendingAlarm.ClearAlarm();
+                pendingAlarm = null;
+                isAlarmPrimary = false;
+                return true; // Caller should abort its Patrol transition
+            }
+        }
+        return false; // No alarm
     }
 
     IEnumerator RadioFlash()

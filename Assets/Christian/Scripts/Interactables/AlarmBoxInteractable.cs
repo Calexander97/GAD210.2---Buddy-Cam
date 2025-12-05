@@ -1,57 +1,80 @@
 using UnityEngine;
 
 /// Drop this on the same GameObject as AlarmBox (and a 2D trigger collider).
-/// It integrates with the existing InteractionManager.
+/// It integrates with the existing InteractionManager without modifying it.
 [RequireComponent(typeof(AlarmBox))]
 [RequireComponent(typeof(Collider2D))]
 public class AlarmBoxInteractable : Interactable
 {
     [Header("Setup")]
-    [Tooltip("Tag used by your player GameObject. Must match InteractionManager.player.")]
+    [Tooltip("Tag used by your player GameObject if InteractionManager.player is not set.")]
     public string playerTag = "Player";
 
-    public InteractionManager interactionManager;
+    [SerializeField] private InteractionManager _managerOverride; // renamed to avoid clash
 
-    AlarmBox alarm;
+    private InteractionManager Manager
+    {
+        get
+        {
+            if (_managerOverride) return _managerOverride;
+            // If the base class already exposes a manager, prefer that (rename if your base uses a different name)
+            // return base.interactionManager; // <- uncomment if your Interactable has this field
+            // Otherwise find one in the scene:
+            _managerOverride = FindFirstObjectByType<InteractionManager>();
+            return _managerOverride;
+        }
+    }
+
+    private AlarmBox alarm;
 
     void Awake()
     {
         alarm = GetComponent<AlarmBox>();
+
         // Ensure trigger setup
         var c = GetComponent<Collider2D>();
         if (c) c.isTrigger = true;
 
-        if (!interactionManager)
-            interactionManager = FindFirstObjectByType<InteractionManager>();
+        // Warm the cache
+        var _ = Manager;
+    }
+
+    void OnEnable()
+    {
+        // If re-enabled while the player is inside, InteractionManager will set us again on next OnTriggerEnter2D
+    }
+
+    void OnDisable()
+    {
+        // Defensive: if disabled while selected, clear selection
+        if (Manager && Manager.CurrentInteractable == this)
+            Manager.ClearCurrentInteractable(this);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!interactionManager) return;
+        var mgr = Manager;
+        if (!mgr) return;
 
-       
-        var isPlayer =
-            (interactionManager.player && other.gameObject == interactionManager.player) ||
-            (!interactionManager.player && other.CompareTag(playerTag));
+        bool isPlayer =
+            (mgr.player && other.gameObject == mgr.player) ||
+            (!mgr.player && other.CompareTag(playerTag));
 
         if (isPlayer)
-        {
-            interactionManager.SetCurrentInteractable(this);
-        }
+            mgr.SetCurrentInteractable(this);
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (!interactionManager) return;
+        var mgr = Manager;
+        if (!mgr) return;
 
-        var isPlayer =
-            (interactionManager.player && other.gameObject == interactionManager.player) ||
-            (!interactionManager.player && other.CompareTag(playerTag));
+        bool isPlayer =
+            (mgr.player && other.gameObject == mgr.player) ||
+            (!mgr.player && other.CompareTag(playerTag));
 
         if (isPlayer)
-        {
-            interactionManager.ClearCurrentInteractable(this);
-        }
+            mgr.ClearCurrentInteractable(this);
     }
 
     // InteractionManager calls this when the button is pressed.
