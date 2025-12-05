@@ -15,8 +15,7 @@ GameObject:
   - component: {fileID: 2741776740558518847}
   - component: {fileID: 7643645863367135204}
   - component: {fileID: 759582991170204910}
-  - component: {fileID: 3285981530618024916}
-  - component: {fileID: 1327733380190920387}
+  - component: {fileID: 6700308860143555732}
   m_Layer: 7
   m_Name: Hero
   m_TagString: Player
@@ -202,13 +201,22 @@ MonoBehaviour:
   throwOrigin: {fileID: 999377685217698036}
   ui: {fileID: 0}
   uiPanelManager: {fileID: 0}
+  player: {fileID: 14489613970032785}
+  throwBlockMask:
+    serializedVersion: 2
+    m_Bits: 576
   startingItems:
   - {fileID: 11400000, guid: 569261b35451db64c946be144ea96e1e, type: 2}
   - {fileID: 11400000, guid: 569261b35451db64c946be144ea96e1e, type: 2}
   - {fileID: 11400000, guid: 569261b35451db64c946be144ea96e1e, type: 2}
-  - {fileID: 11400000, guid: 569261b35451db64c946be144ea96e1e, type: 2}
-  - {fileID: 11400000, guid: 569261b35451db64c946be144ea96e1e, type: 2}
-  - {fileID: 11400000, guid: bbace95946bc8cb49a068491ef63aee7, type: 2}
+  - {fileID: 11400000, guid: 2ba2aa5a9b4d4394eb659d35a6abddf2, type: 2}
+  - {fileID: 11400000, guid: 2ba2aa5a9b4d4394eb659d35a6abddf2, type: 2}
+  - {fileID: 11400000, guid: 2ba2aa5a9b4d4394eb659d35a6abddf2, type: 2}
+  - {fileID: 11400000, guid: f2aa996695b1c6048aef950fc91c8296, type: 2}
+  - {fileID: 11400000, guid: f2aa996695b1c6048aef950fc91c8296, type: 2}
+  - {fileID: 11400000, guid: f2aa996695b1c6048aef950fc91c8296, type: 2}
+  - {fileID: 11400000, guid: f2aa996695b1c6048aef950fc91c8296, type: 2}
+  - {fileID: 11400000, guid: f2aa996695b1c6048aef950fc91c8296, type: 2}
 --- !u!114 &759582991170204910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +237,7 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
---- !u!50 &3285981530618024916
+--- !u!50 &6700308860143555732
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -256,26 +264,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1327733380190920387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14489613970032785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feda65aa80edd1c418c21ab2e5500af6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeroHealth
-  maxHearts: 3
-  iFrames: 0.3
-  onDamaged:
-    m_PersistentCalls:
-      m_Calls: []
-  onDeath:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3762253884749826759
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,4 +466,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   useButton: {fileID: 0}
+  normalSlotColor: {r: 0, g: 0, b: 0, a: 1}
+  selectedSlotColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}

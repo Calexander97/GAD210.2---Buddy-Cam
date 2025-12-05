@@ -9,6 +9,9 @@ public class AlarmBox : MonoBehaviour
     public float radioRadius = 20f;
     public float claimRangeBonus = 2f; // reserved if you later bias primary selection
 
+    [Tooltip("If > 0, the alarm will auto-clear after this many seconds even if no guards reaches it.")]
+    public float autoSilenceAfter = 15f;
+
     [Header("Visuals")]
     public GameObject alarmOnVisual;   // blinking sprite/light (optional)
     public GameObject alarmOffVisual;  // idle sprite/light (optional)
@@ -56,6 +59,9 @@ public class AlarmBox : MonoBehaviour
         }
         onActivated?.Invoke();
         AlertManager.Instance?.BroadcastAlarm(this);
+
+        // Starts failsafe timer
+        if (autoSilenceAfter > 0f) StartCoroutine(AutoSilence());
     }
 
     /// Called by the primary guard when they reach the box.
@@ -73,7 +79,15 @@ public class AlarmBox : MonoBehaviour
             if (deactivateSFX) audioSource.PlayOneShot(deactivateSFX, sfxVolume);
         }
 
+        StopAllCoroutines();
         onDeactivated?.Invoke();
+    }
+
+    System.Collections.IEnumerator AutoSilence()
+    {
+        float t = autoSilenceAfter;
+        while (t > 0f && isActive) { t -= Time.deltaTime; yield return null; }
+        if (isActive) ClearAlarm();
     }
 
     void SetVisuals()

@@ -1,0 +1,1406 @@
+fileFormatVersion: 2
+guid: beb8a80188b1cb74aa6caf2123f45f9a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7800793348514175766
+    second: CopBuddy_DecorSprites_0
+  - first:
+      213: -7624396814031999760
+    second: CopBuddy_DecorSprites_1
+  - first:
+      213: 1500750633391743592
+    second: CopBuddy_DecorSprites_2
+  - first:
+      213: 1866857075947380950
+    second: CopBuddy_DecorSprites_3
+  - first:
+      213: -6474391688598613672
+    second: CopBuddy_DecorSprites_4
+  - first:
+      213: 1110352975860443194
+    second: CopBuddy_DecorSprites_5
+  - first:
+      213: 3569808657663472563
+    second: CopBuddy_DecorSprites_6
+  - first:
+      213: -7341359223034489109
+    second: CopBuddy_DecorSprites_7
+  - first:
+      213: -3623985581500357431
+    second: CopBuddy_DecorSprites_8
+  - first:
+      213: 5628122031738371561
+    second: CopBuddy_DecorSprites_9
+  - first:
+      213: 6567809557419194314
+    second: CopBuddy_DecorSprites_10
+  - first:
+      213: 6087517270680973031
+    second: CopBuddy_DecorSprites_11
+  - first:
+      213: -7484509089441919396
+    second: CopBuddy_DecorSprites_12
+  - first:
+      213: 2038702272762573902
+    second: CopBuddy_DecorSprites_13
+  - first:
+      213: 7928946153147412695
+    second: CopBuddy_DecorSprites_14
+  - first:
+      213: -4798561848642740965
+    second: CopBuddy_DecorSprites_15
+  - first:
+      213: 1205562248251051020
+    second: CopBuddy_DecorSprites_16
+  - first:
+      213: 7798897081081114413
+    second: CopBuddy_DecorSprites_17
+  - first:
+      213: 5006769210659139001
+    second: CopBuddy_DecorSprites_18
+  - first:
+      213: -6945883397411242781
+    second: CopBuddy_DecorSprites_19
+  - first:
+      213: 1253833905032509987
+    second: CopBuddy_DecorSprites_20
+  - first:
+      213: 354944209254649326
+    second: CopBuddy_DecorSprites_21
+  - first:
+      213: 15430257686435272
+    second: CopBuddy_DecorSprites_22
+  - first:
+      213: -2502871535316111988
+    second: CopBuddy_DecorSprites_23
+  - first:
+      213: -8368491339929874694
+    second: CopBuddy_DecorSprites_24
+  - first:
+      213: -8335105582561621512
+    second: CopBuddy_DecorSprites_25
+  - first:
+      213: 1412329183702030857
+    second: CopBuddy_DecorSprites_26
+  - first:
+      213: -8983915404019460440
+    second: CopBuddy_DecorSprites_27
+  - first:
+      213: -6249461612122368736
+    second: CopBuddy_DecorSprites_28
+  - first:
+      213: 673139913373197432
+    second: CopBuddy_DecorSprites_29
+  - first:
+      213: -3647569941399095508
+    second: CopBuddy_DecorSprites_30
+  - first:
+      213: 8785017624684965340
+    second: CopBuddy_DecorSprites_31
+  - first:
+      213: -3050711260966691791
+    second: CopBuddy_DecorSprites_32
+  - first:
+      213: 4675414447888119856
+    second: CopBuddy_DecorSprites_33
+  - first:
+      213: 5275373506791989461
+    second: CopBuddy_DecorSprites_34
+  - first:
+      213: -8377505577190212682
+    second: CopBuddy_DecorSprites_35
+  - first:
+      213: 1437776049022348497
+    second: CopBuddy_DecorSprites_36
+  - first:
+      213: -7735645686817271564
+    second: CopBuddy_DecorSprites_37
+  - first:
+      213: -8213791265209032188
+    second: CopBuddy_DecorSprites_38
+  - first:
+      213: -2566631035377354662
+    second: CopBuddy_DecorSprites_39
+  - first:
+      213: 3127207829448622891
+    second: CopBuddy_DecorSprites_40
+  - first:
+      213: 3237769175548909253
+    second: CopBuddy_DecorSprites_41
+  - first:
+      213: 4053395978082349494
+    second: CopBuddy_DecorSprites_42
+  - first:
+      213: 6720277392637777251
+    second: CopBuddy_DecorSprites_43
+  - first:
+      213: 377928317161372741
+    second: CopBuddy_DecorSprites_44
+  - first:
+      213: -5634810523227590471
+    second: CopBuddy_DecorSprites_45
+  - first:
+      213: 5858650201296178806
+    second: CopBuddy_DecorSprites_46
+  - first:
+      213: 7077511108425630661
+    second: CopBuddy_DecorSprites_47
+  - first:
+      213: -2164275172177184359
+    second: CopBuddy_DecorSprites_48
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 980
+        width: 200
+        height: 300
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae42597a7c30eb390800000000000000
+      internalID: -7800793348514175766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_1
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 1170
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fca0015e73b03690800000000000000
+      internalID: -7624396814031999760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_2
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 1170
+        width: 120
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 862e1cfefbcb3d410800000000000000
+      internalID: 1500750633391743592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_3
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 1090
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d0a44a9e9868e910800000000000000
+      internalID: 1866857075947380950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_4
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 1030
+        width: 230
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8519650ef075626a0800000000000000
+      internalID: -6474391688598613672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_5
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 890
+        width: 120
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a38a57d0624c86f00800000000000000
+      internalID: 1110352975860443194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_6
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 910
+        width: 210
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b3352c7f028a8130800000000000000
+      internalID: 3569808657663472563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_7
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 920
+        width: 140
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be6dd7ecea04e1a90800000000000000
+      internalID: -7341359223034489109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_8
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 760
+        width: 220
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c4a887705405bdc0800000000000000
+      internalID: -3623985581500357431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_9
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 760
+        width: 140
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9edb0563b2b1b1e40800000000000000
+      internalID: 5628122031738371561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_10
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 730
+        width: 80
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac7f266aefb852b50800000000000000
+      internalID: 6567809557419194314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_11
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 780
+        width: 130
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7eeaef264b43b7450800000000000000
+      internalID: 6087517270680973031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_12
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 700
+        width: 60
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5ec1a543aea12890800000000000000
+      internalID: -7484509089441919396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_13
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 790
+        width: 140
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e447bc26aecea4c10800000000000000
+      internalID: 2038702272762573902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_14
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 620
+        width: 220
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d03d855486490e60800000000000000
+      internalID: 7928946153147412695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_15
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 540
+        width: 160
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1d58ea2c65186db0800000000000000
+      internalID: -4798561848642740965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_16
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 710
+        width: 60
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0c00a93a740bb010800000000000000
+      internalID: 1205562248251051020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_17
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 660
+        width: 140
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2fabad239f3b3c60800000000000000
+      internalID: 7798897081081114413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_18
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 470
+        width: 220
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bd63b1f11e9b7540800000000000000
+      internalID: 5006769210659139001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_19
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 560
+        width: 140
+        height: 140
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ecf406d9d34b9f90800000000000000
+      internalID: -6945883397411242781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_20
+      rect:
+        serializedVersion: 2
+        x: 630
+        y: 530
+        width: 170
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32abdc42b43866110800000000000000
+      internalID: 1253833905032509987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_21
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 330
+        width: 220
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eed84b3b0e30de400800000000000000
+      internalID: 354944209254649326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_22
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 410
+        width: 120
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c55134dcb1d63000800000000000000
+      internalID: 15430257686435272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_23
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 430
+        width: 100
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8deb037993044dd0800000000000000
+      internalID: -2502871535316111988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_24
+      rect:
+        serializedVersion: 2
+        x: 630
+        y: 400
+        width: 170
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afe0c89e6752ddb80800000000000000
+      internalID: -8368491339929874694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_25
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 290
+        width: 140
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f90a0a42a1c35c80800000000000000
+      internalID: -8335105582561621512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_26
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 350
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90a1a74e8e9999310800000000000000
+      internalID: 1412329183702030857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_27
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 350
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a69243f988b25380800000000000000
+      internalID: -8983915404019460440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_28
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 270
+        width: 140
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 025910c56c37549a0800000000000000
+      internalID: -6249461612122368736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_29
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 330
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8742fbc4f29775900800000000000000
+      internalID: 673139913373197432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_30
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 330
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c27b385c67a316dc0800000000000000
+      internalID: -3647569941399095508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_31
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 270
+        width: 40
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdda4e01cf6aae970800000000000000
+      internalID: 8785017624684965340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 190
+        width: 230
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13cdbc18542b9a5d0800000000000000
+      internalID: -3050711260966691791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_33
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 220
+        width: 90
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 038b9104ba862e040800000000000000
+      internalID: 4675414447888119856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_34
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 300
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d0e7d91144e53940800000000000000
+      internalID: 5275373506791989461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_35
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 190
+        width: 200
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bb39bf301f1dbb80800000000000000
+      internalID: -8377505577190212682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_36
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 240
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1dcaa8ce2b104f310800000000000000
+      internalID: 1437776049022348497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_37
+      rect:
+        serializedVersion: 2
+        x: 570
+        y: 280
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f059f8ab3775a490800000000000000
+      internalID: -7735645686817271564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_38
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 240
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4026202ec50c20e80800000000000000
+      internalID: -8213791265209032188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_39
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 190
+        width: 40
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a58f6d20cae716cd0800000000000000
+      internalID: -2566631035377354662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_40
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 140
+        width: 140
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b230b15c3f2166b20800000000000000
+      internalID: 3127207829448622891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_41
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 190
+        width: 20
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c65d4529eddeec20800000000000000
+      internalID: 3237769175548909253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_42
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 200
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b1789f8a2e804830800000000000000
+      internalID: 4053395978082349494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_43
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 220
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 365534cdea8334d50800000000000000
+      internalID: 6720277392637777251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_44
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 190
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54cf6f65dcbae3500800000000000000
+      internalID: 377928317161372741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_45
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 200
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b0f2620fa12dc1b0800000000000000
+      internalID: -5634810523227590471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_46
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 320
+        height: 180
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67e878f415b1e4150800000000000000
+      internalID: 5858650201296178806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_47
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 0
+        width: 320
+        height: 180
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c34797dade583260800000000000000
+      internalID: 7077511108425630661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CopBuddy_DecorSprites_48
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 0
+        width: 140
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9997e2e9233f6f1e0800000000000000
+      internalID: -2164275172177184359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 675f741e4e500a942b5b36395b8ef612
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      CopBuddy_DecorSprites_0: -7800793348514175766
+      CopBuddy_DecorSprites_1: -7624396814031999760
+      CopBuddy_DecorSprites_10: 6567809557419194314
+      CopBuddy_DecorSprites_11: 6087517270680973031
+      CopBuddy_DecorSprites_12: -7484509089441919396
+      CopBuddy_DecorSprites_13: 2038702272762573902
+      CopBuddy_DecorSprites_14: 7928946153147412695
+      CopBuddy_DecorSprites_15: -4798561848642740965
+      CopBuddy_DecorSprites_16: 1205562248251051020
+      CopBuddy_DecorSprites_17: 7798897081081114413
+      CopBuddy_DecorSprites_18: 5006769210659139001
+      CopBuddy_DecorSprites_19: -6945883397411242781
+      CopBuddy_DecorSprites_2: 1500750633391743592
+      CopBuddy_DecorSprites_20: 1253833905032509987
+      CopBuddy_DecorSprites_21: 354944209254649326
+      CopBuddy_DecorSprites_22: 15430257686435272
+      CopBuddy_DecorSprites_23: -2502871535316111988
+      CopBuddy_DecorSprites_24: -8368491339929874694
+      CopBuddy_DecorSprites_25: -8335105582561621512
+      CopBuddy_DecorSprites_26: 1412329183702030857
+      CopBuddy_DecorSprites_27: -8983915404019460440
+      CopBuddy_DecorSprites_28: -6249461612122368736
+      CopBuddy_DecorSprites_29: 673139913373197432
+      CopBuddy_DecorSprites_3: 1866857075947380950
+      CopBuddy_DecorSprites_30: -3647569941399095508
+      CopBuddy_DecorSprites_31: 8785017624684965340
+      CopBuddy_DecorSprites_32: -3050711260966691791
+      CopBuddy_DecorSprites_33: 4675414447888119856
+      CopBuddy_DecorSprites_34: 5275373506791989461
+      CopBuddy_DecorSprites_35: -8377505577190212682
+      CopBuddy_DecorSprites_36: 1437776049022348497
+      CopBuddy_DecorSprites_37: -7735645686817271564
+      CopBuddy_DecorSprites_38: -8213791265209032188
+      CopBuddy_DecorSprites_39: -2566631035377354662
+      CopBuddy_DecorSprites_4: -6474391688598613672
+      CopBuddy_DecorSprites_40: 3127207829448622891
+      CopBuddy_DecorSprites_41: 3237769175548909253
+      CopBuddy_DecorSprites_42: 4053395978082349494
+      CopBuddy_DecorSprites_43: 6720277392637777251
+      CopBuddy_DecorSprites_44: 377928317161372741
+      CopBuddy_DecorSprites_45: -5634810523227590471
+      CopBuddy_DecorSprites_46: 5858650201296178806
+      CopBuddy_DecorSprites_47: 7077511108425630661
+      CopBuddy_DecorSprites_48: -2164275172177184359
+      CopBuddy_DecorSprites_5: 1110352975860443194
+      CopBuddy_DecorSprites_6: 3569808657663472563
+      CopBuddy_DecorSprites_7: -7341359223034489109
+      CopBuddy_DecorSprites_8: -3623985581500357431
+      CopBuddy_DecorSprites_9: 5628122031738371561
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

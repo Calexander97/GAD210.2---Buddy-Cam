@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -4608781778232491207}
   - component: {fileID: -6671044333136754183}
   - component: {fileID: -8132392791226281339}
+  - component: {fileID: -7133877586413722818}
   m_Layer: 0
   m_Name: Lure
   m_TagString: Untagged
@@ -147,7 +148,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5191764969934464164}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea656ce4580e1344c8bfbff6ad59abb7, type: 3}
   m_Name: 
@@ -162,7 +163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5191764969934464164}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 220d785313a44394ab3578e66e5402b5, type: 3}
   m_Name: 
@@ -183,3 +184,25 @@ MonoBehaviour:
   stepLoudness: 1
   stepInterval: 0.35
   minSpeedForSteps: 0.2
+  sfxClip: {fileID: 0}
+  sfxVolume: 1
+  sfxPitchRange: {x: 0.95, y: 1.05}
+  scaleVolumeByLoudness: 1
+--- !u!114 &-7133877586413722818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5191764969934464164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a34e109d4f6b62f4384a8c2c6f0263b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LurePing
+  loudness: 1
+  fallbackPingDelay: 0.12
+  landSfx: {fileID: 8300000, guid: 18463a237023df54791aeb3c5e5f067a, type: 3}
+  landSfxVolume: 1
+  autoAddAudioSource: 1
+  destroyAfter: 5

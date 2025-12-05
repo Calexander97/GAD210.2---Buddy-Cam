@@ -9,6 +9,8 @@ public class AlertManager : MonoBehaviour
 {
     [HeaderAttribute("Noise -> Guard Investigate")]
     public float baseNoiseRadius = 10f;         // loudnesss =1 =/ this radius
+    public float noiseInvestigateTime = 3.5f;
+    public float noiseArriveRadius = 1.2f;
     public bool useOcclusion = false;
     public LayerMask occluderMask;             // e.g., Walls
 
@@ -27,7 +29,8 @@ public class AlertManager : MonoBehaviour
             if (!g || !g.isActiveAndEnabled) continue;
 
             // Don't override a live chase
-            if (g.state == GuardAI.State.Alerted) continue;
+            if (g.state == GuardAI.State.Alerted && g.sensors && g.sensors.targetVisible)
+                continue;
 
             // Range check
             var gp = (Vector2)g.transform.position;
@@ -36,13 +39,13 @@ public class AlertManager : MonoBehaviour
             // Optional: simple LOS occlusion
             if (useOcclusion)
             {
-                var hit = Physics2D.Raycast(gp, (pos - gp).normalized,
-                                Vector2.Distance(gp, pos), occluderMask);
+                var dir = (pos - gp).normalized;
+                var hit = Physics2D.Raycast(gp, dir, Vector2.Distance(gp, pos), occluderMask);
                 if (hit.collider) continue; // Blocked by wall
             }
 
-            // Lure noise should not chain radios -> relayEligible: false
-            g.BeginInvestigateExternal(pos, relayEligible: false);
+            // One investigate per ping; no radio chaining for lures
+            g.InvestigateNoise(pos, noiseInvestigateTime, noiseArriveRadius);
         }
 
         if (verboseLogging)
