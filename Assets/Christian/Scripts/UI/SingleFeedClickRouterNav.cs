@@ -52,15 +52,19 @@ public class SingleFeedClickRouterNav : MonoBehaviour
         // 2) Soft-snap ground clicks to nearby interactables (quality-of-life).
         if (interactSnapRadius > 0f)
         {
-            var near = Physics2D.OverlapCircleAll(world, interactMask);
-            if (near != null)
+            var near = Physics2D.OverlapCircleAll(
+                world,
+                interactSnapRadius,
+                interactMask
+            );
+
+            for (int i = 0; i < near.Length; i++)
             {
-                for (int i = 0; i < near.Length; i++)
-                    if (near[i] && near[i].TryGetComponent<IInteractable>(out var nInter))
-                    {
-                        hero.MoveToInteract(nInter);
-                        return;
-                    }
+                if (near[i].TryGetComponent<IInteractable>(out var nInter))
+                {
+                    hero.MoveToInteract(nInter);
+                    return;
+                }
             }
         }
 
