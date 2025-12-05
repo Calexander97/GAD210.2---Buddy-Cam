@@ -8,8 +8,11 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Christian/Scenes/SampleScene2.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Christian/Scenes/Develop-Christian.unity
     guid: ad5b1ddbceefb594b805d495a8114304
+  - enabled: 1
+    path: Assets/Christian/Scenes/MainGameWorld -Brent 2.unity
+    guid: 20fa44ace668e1e4fbb20a2c2b486347
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

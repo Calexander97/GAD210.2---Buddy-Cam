@@ -16,9 +16,6 @@ public class ButtonSFX : MonoBehaviour
 
     void PlaySound()
     {
-        if (clip != null && SFXManager.Instance != null)
-        {
-            SFXManager.Instance.PlaySFX(clip);
-        }
+        SFXManager.Instance.PlayButtonClick();
     }
 }

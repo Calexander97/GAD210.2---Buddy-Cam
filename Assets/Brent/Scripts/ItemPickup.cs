@@ -11,6 +11,11 @@ public class ItemPickup : MonoBehaviour
         if (inv != null)
         {
             inv.AddItem(item, amount);
+
+            // play pickup SFX
+            if (SFXManager.Instance != null)
+                SFXManager.Instance.PlayPickup();
+
             Destroy(gameObject);
         }
     }

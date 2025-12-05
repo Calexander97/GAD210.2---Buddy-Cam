@@ -17,7 +17,7 @@ public class LureProjectile : MonoBehaviour
         finalPrefab = placedPrefab;
 
         if (SFXManager.Instance != null)
-            SFXManager.Instance.PlaySFX(SFXManager.Instance.itemThrow);
+            SFXManager.Instance.PlayThrow();
     }
 
     void Start()

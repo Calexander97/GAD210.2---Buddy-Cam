@@ -26,7 +26,7 @@ public class SmokeGrenade : MonoBehaviour
 
     void PlaySFX()
     {
-        SFXManager.Instance.PlaySFX(activateSFX);
+        SFXManager.Instance.PlaySmoke();
     }
 
     void Detonate()
@@ -35,9 +35,7 @@ public class SmokeGrenade : MonoBehaviour
         {
             GameObject smoke = Instantiate(smokeCloudPrefab, transform.position, Quaternion.identity);
 
-            var cloud = smoke.GetComponent<SmokeCloud>();
-            if (cloud != null)
-                cloud.duration = smokeDuration;
+            Destroy(smoke, smokeDuration);
         }
 
         Destroy(gameObject);
