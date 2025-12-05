@@ -14,14 +14,24 @@ public class GuardAI : MonoBehaviour
     public Transform[] patrolPoints;
     public float waypointTolerance = 0.15f;
 
+    public enum EngageStyle { Shooter, Melee }
+
     [Header("Engage")]
-    [Tooltip("Preferred standoff distance while firing.")]
+    [Tooltip("Shooter holds this standoff distance. Melee ignores this.")]
     public float engageDistance = 3.0f;
-    [Tooltip("Tiny band to avoid micro-oscillation around the distance.")]
+    [Tooltip("Small band to avoid oscillation for shooters.")]
     public float engageSlack = 0.35f;
+    [Tooltip("Pick how this guard behaves when Alerted.")]
+    public EngageStyle engageStyle = EngageStyle.Shooter;
+
+    [Header("Melee")]
+    [Tooltip("How close a melee tries to get before stopping to swing.")]
+    public float meleeStopDistance = 0.6f;
+    [Tooltip("If true, a melee unit will radio once immediately upon first sight.")]
+    public bool radioOnSightForMelee = false;
 
     [Header("Alert → Investigate")]
-    [Tooltip("How long to keep heading for LKP after LOS is lost before switching to Investigate search.")]
+    [Tooltip("How long to keep heading for LKP after LOS is lost before switching to Investigate.")]
     public float lostSightGrace = 0.8f;
 
     [Header("Investigate")]
@@ -31,19 +41,19 @@ public class GuardAI : MonoBehaviour
     public float searchRadius = 2.0f;
     [Tooltip("Total time to search before returning to patrol.")]
     public float searchTime = 6.0f;
-    float currentSearchTime;          // how long this investigate lasts
-    float arriveRadiusCurrent = -1f;  // how close counts as "arrived" at the center
+    float currentSearchTime;
+    float arriveRadiusCurrent = -1f;
 
     [Header("Facing")]
     public bool forwardIsUp = true;
     public float turnSpeed = 360f;
 
     [Header("Stability")]
-    [Tooltip("A short cool-down after killing the hero to avoid instant re-triggering.")]
+    [Tooltip("Cooldown after killing the hero to avoid instant re-triggering.")]
     public float postKillCalm = 1.25f;
 
     [Header("Radio")]
-    [Tooltip("Who hears the LKP when LOS is lost.")]
+    [Tooltip("Who hears the LKP when LOS is lost (or on-sight for melee if enabled).")]
     public float radioRange = 18f;
     [Tooltip("Optional icon shown briefly when broadcasting.")]
     public GameObject radioIcon;
@@ -62,8 +72,8 @@ public class GuardAI : MonoBehaviour
     float lostSightTimer;
     float searchTimer;
     float totalSearchTime;
-    Vector2 searchCenter;              // fixed LKP for current Investigate
-    bool goingToLKP = false;           // phase 1 of Investigate: go to exact LKP
+    Vector2 searchCenter;
+    bool goingToLKP = false;
 
     HeroHealth targetHealth;
     Transform lastTarget;
@@ -71,8 +81,9 @@ public class GuardAI : MonoBehaviour
     float ignorePerceptionUntil = 0f;
 
     // Radio control
-    bool canRelayThisPursuit = true;   // true for original spotter; false for radioed-in guards
-    bool radioSentThisInvestigate = false; // ensure only one radio per Investigate
+    bool canRelayThisPursuit = true;          // original spotter may relay
+    bool radioSentThisInvestigate = false;    // only one radio per investigate
+    bool meleeSightPingSent = false;          // one-shot “saw them!” radio for melee
 
     // Alarm response
     AlarmBox pendingAlarm;
@@ -106,6 +117,11 @@ public class GuardAI : MonoBehaviour
             searchTime = profile.searchTime;
         }
 
+        // Ensure melee closes in properly (no shooter standoff).
+        agent.stoppingDistance = (engageStyle == EngageStyle.Melee)
+            ? Mathf.Max(0f, meleeStopDistance)
+            : 0f;
+
         if (patrolPoints != null && patrolPoints.Length > 0)
             agent.SetDestination(patrolPoints[patrolIndex].position);
 
@@ -133,7 +149,7 @@ public class GuardAI : MonoBehaviour
         Face();
     }
 
-    // PATROL
+    // ───────────────────────────────── PATROL
     void TickPatrol()
     {
         if (profile) agent.speed = profile.patrolSpeed;
@@ -146,8 +162,17 @@ public class GuardAI : MonoBehaviour
             if (profile) agent.speed = profile.chaseSpeed;
             lostSightTimer = 0f;
             hadLOSLastFrame = true;
-            canRelayThisPursuit = true;       // original spotter can relay
-            radioSentThisInvestigate = false; // reset any residual
+            canRelayThisPursuit = true;
+            radioSentThisInvestigate = false;
+            meleeSightPingSent = false;
+
+            // Optional: melee pings radio immediately on first sight
+            if (engageStyle == EngageStyle.Melee && radioOnSightForMelee && canRelayThisPursuit && !meleeSightPingSent)
+            {
+                AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
+                if (radioIcon) StartCoroutine(RadioFlash());
+                meleeSightPingSent = true;
+            }
             return;
         }
 
@@ -158,7 +183,7 @@ public class GuardAI : MonoBehaviour
         }
     }
 
-    // ALERTED
+    // ───────────────────────────────── ALERTED
     void TickAlerted()
     {
         if (profile) agent.speed = profile.chaseSpeed;
@@ -166,7 +191,7 @@ public class GuardAI : MonoBehaviour
         var tgt = sensors ? sensors.target : null;
         if (!tgt || TargetIsDead())
         {
-            // Before patrolling, make sure the alarm is handled.
+            // Before patrolling, make sure any active alarm is handled.
             if (EnsureAlarmClearedOrKeepGoing()) return;
 
             state = State.Patrol;
@@ -175,16 +200,15 @@ public class GuardAI : MonoBehaviour
                 agent.SetDestination(patrolPoints[patrolIndex].position);
             ignorePerceptionUntil = Time.time + postKillCalm;
             hadLOSLastFrame = false;
-            //radioSentThisInvestigate = false;
             return;
         }
 
         bool inLOS = sensors.targetVisible;
 
-        // EDGE: just lost LOS → immediately broadcast and head to LKP
+        // Edge: just lost LOS → broadcast and head to LKP
         if (!inLOS && hadLOSLastFrame)
         {
-            if (canRelayThisPursuit)          // only the original spotter relays (unless manager allows chaining)
+            if (canRelayThisPursuit)
             {
                 AlertManager.Instance?.BroadcastLKP(sensors.lastSeenPos, this, radioRange);
                 if (radioIcon) StartCoroutine(RadioFlash());
@@ -194,40 +218,52 @@ public class GuardAI : MonoBehaviour
 
         if (inLOS)
         {
-            // Simple standoff band
-            Vector2 guardPos = transform.position;
-            Vector2 targetPos = tgt.position;
-            Vector2 to = targetPos - guardPos;
-            float dist = to.magnitude;
-
-            float min = Mathf.Max(0.1f, engageDistance - engageSlack);
-            float max = engageDistance + engageSlack;
-
-            if (dist > max)
+            if (engageStyle == EngageStyle.Melee)
             {
+                // MELEE: push directly toward target (no standoff band).
                 agent.isStopped = false;
-                agent.SetDestination(targetPos);
-            }
-            else if (dist < min)
-            {
-                agent.isStopped = false;
-                Vector2 desired = targetPos - to.normalized * engageDistance;
-                if (NavMesh.SamplePosition(desired, out var hit, 1.25f, NavMesh.AllAreas))
-                    agent.SetDestination(hit.position);
-                else
-                    agent.SetDestination(desired);
+                agent.stoppingDistance = Mathf.Max(0f, meleeStopDistance);
+                agent.SetDestination(tgt.position);
             }
             else
             {
-                agent.isStopped = true;
-                if (agent.hasPath) agent.ResetPath();
+                // SHOOTER: maintain standoff band.
+                Vector2 guardPos = transform.position;
+                Vector2 targetPos = tgt.position;
+                Vector2 to = targetPos - guardPos;
+                float dist = to.magnitude;
+
+                float min = Mathf.Max(0.1f, engageDistance - engageSlack);
+                float max = engageDistance + engageSlack;
+
+                if (dist > max)
+                {
+                    agent.isStopped = false;
+                    agent.stoppingDistance = 0f;
+                    agent.SetDestination(targetPos);
+                }
+                else if (dist < min)
+                {
+                    agent.isStopped = false;
+                    agent.stoppingDistance = 0f;
+                    Vector2 desired = targetPos - to.normalized * engageDistance;
+                    if (NavMesh.SamplePosition(desired, out var hit, 1.25f, NavMesh.AllAreas))
+                        agent.SetDestination(hit.position);
+                    else
+                        agent.SetDestination(desired);
+                }
+                else
+                {
+                    agent.isStopped = true;
+                    if (agent.hasPath) agent.ResetPath();
+                }
             }
 
             lostSightTimer = 0f; // reset grace
         }
         else
         {
-            // Lost sight → push toward LKP
+            // Lost sight → push toward LKP, then search after a grace period.
             lostSightTimer += Time.deltaTime;
             Vector3 lkp = sensors.lastSeenPos;
 
@@ -235,7 +271,6 @@ public class GuardAI : MonoBehaviour
             if (!agent.pathPending && Vector3.Distance(agent.destination, lkp) > 0.05f)
                 agent.SetDestination(lkp);
 
-            // After grace, enter Investigate; optionally (manager/flag) relay once
             if (lostSightTimer >= lostSightGrace)
             {
                 BeginInvestigate(sensors.lastSeenPos);
@@ -252,7 +287,7 @@ public class GuardAI : MonoBehaviour
         hadLOSLastFrame = inLOS;
     }
 
-    // INVESTIGATE
+    // ───────────────────────────────── INVESTIGATE
     void TickInvestigate()
     {
         if (profile) agent.speed = profile.patrolSpeed;
@@ -268,12 +303,11 @@ public class GuardAI : MonoBehaviour
 
         totalSearchTime += Time.deltaTime;
 
-        // Phase 1 → reach exact LKP
         if (goingToLKP)
         {
             float arrive = (arriveRadiusCurrent > 0f) ? arriveRadiusCurrent : waypointTolerance;
 
-            if (!agent.pathPending && agent.remainingDistance <= arrive)   // <-- use 'arrive' here
+            if (!agent.pathPending && agent.remainingDistance <= arrive)
             {
                 goingToLKP = false;
 
@@ -290,10 +324,9 @@ public class GuardAI : MonoBehaviour
                     agent.SetDestination((Vector3)searchCenter);
             }
         }
-
         else
         {
-            // Phase 2 → wander around LKP
+            // Wander around fixed LKP.
             if (!agent.pathPending && agent.remainingDistance <= waypointTolerance)
             {
                 searchTimer += Time.deltaTime;
@@ -305,24 +338,20 @@ public class GuardAI : MonoBehaviour
             }
         }
 
-        if (totalSearchTime >=currentSearchTime)
+        if (totalSearchTime >= currentSearchTime)
         {
-            // Try to clear the alarm before giving up to Patrol.
             if (EnsureAlarmClearedOrKeepGoing()) return;
 
             state = State.Patrol;
-            //radioSentThisInvestigate = false;
             if (patrolPoints != null && patrolPoints.Length > 0)
                 agent.SetDestination(patrolPoints[patrolIndex].position);
             hadLOSLastFrame = false;
         }
     }
 
-    // Transitions / helpers
-    void BeginInvestigate(Vector2 center)
-    {
-        BeginInvestigate(center, null, null);
-    }
+    // ───────────────────────────────── Transitions / helpers
+    void BeginInvestigate(Vector2 center) { BeginInvestigate(center, null, null); }
+
     void BeginInvestigate(Vector2 center, float? timeOverride, float? arriveRadiusOverride)
     {
         state = State.Investigate;
@@ -341,7 +370,7 @@ public class GuardAI : MonoBehaviour
 
     public void InvestigateNoise(Vector2 pingPos, float duration, float arriveRadius)
     {
-        // Dont override an eyes-on chase
+        // Don't override an eyes-on chase
         if (state == State.Alerted && sensors && sensors.targetVisible) return;
         BeginInvestigate(pingPos, duration, arriveRadius);
         // Noise pings shouldn't chain radios
@@ -364,7 +393,6 @@ public class GuardAI : MonoBehaviour
         return !targetHealth || targetHealth.Current <= 0 || !targetHealth.gameObject.activeInHierarchy;
     }
 
-    // Facing
     void Face()
     {
         Vector2 desired;
@@ -389,7 +417,6 @@ public class GuardAI : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, goal, turnSpeed * Time.deltaTime);
     }
 
-    // Health wiring
     void OnTargetDied()
     {
         ignorePerceptionUntil = Time.time + postKillCalm;
@@ -412,7 +439,7 @@ public class GuardAI : MonoBehaviour
     // External triggers
     public void BeginInvestigateExternal(Vector2 center, bool relayEligible)
     {
-        if (state == State.Alerted) return; // if actively chasing, don't override
+        if (state == State.Alerted) return; // keep chasing if we have LOS
         BeginInvestigate(center);
         radioSentThisInvestigate = false;
         canRelayThisPursuit = relayEligible;
@@ -431,20 +458,18 @@ public class GuardAI : MonoBehaviour
 
     bool EnsureAlarmClearedOrKeepGoing()
     {
-        // If there's an active alarm, try to clear it before giving up
         if (pendingAlarm && pendingAlarm.isActive)
         {
             float d = Vector2.Distance(transform.position, pendingAlarm.transform.position);
-
             if (d <= alarmClearRange)
             {
                 pendingAlarm.ClearAlarm();
                 pendingAlarm = null;
                 isAlarmPrimary = false;
-                return true; // Caller should abort its Patrol transition
+                return true; // caller should abort Patrol transition this frame
             }
         }
-        return false; // No alarm
+        return false;
     }
 
     IEnumerator RadioFlash()
