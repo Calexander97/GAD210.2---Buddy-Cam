@@ -31,8 +31,8 @@ Transform:
   m_GameObject: {fileID: 1227783541441275338}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.0402799, y: -5.05709, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: -1.03955, y: 0.00831, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6632839797781646546}
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_SortingLayerID: -1481572719
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6603585493446561638, guid: 27b2ac17a655215498b1a5325240f225, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1ca6218b64da0a24dad3659c40435456, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -134,8 +134,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.09}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: -0.25}
-    oldSize: {x: 0.1, y: 0.12}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.6, y: 1.6}
     newSize: {x: 0.1, y: 0.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -153,7 +153,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.1
-  m_Speed: 3.5
+  m_Speed: 2.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -178,13 +178,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GuardAI
   profile: {fileID: 11400000, guid: 008d0afdf6147494494274243fe23e54, type: 2}
-  sensors: {fileID: 0}
+  sensors: {fileID: 4413028015675163632}
   patrolPoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   waypointTolerance: 0.15
+  dwellAtPatrolPoints: 1
+  patrolDwellRange: {x: 2, y: 6}
   engageDistance: 3
   engageSlack: 0.35
   engageStyle: 0
@@ -218,10 +220,10 @@ MonoBehaviour:
   shootRange: 8
   cooldown: 0.6
   muzzle: {fileID: 0}
-  idleSprite: {fileID: 0}
-  shootingSprite: {fileID: 0}
+  idleSprite: {fileID: -2477154366933651378, guid: 460d50428329aa04c9d8e2dae6701ad7, type: 3}
+  shootingSprite: {fileID: -3743328697098500735, guid: 460d50428329aa04c9d8e2dae6701ad7, type: 3}
   shootingSpriteTime: 0.12
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 4892295469287432774}
 --- !u!114 &4413028015675163632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,7 +357,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2081802326689582511}
