@@ -5922,7 +5922,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &342764169
 Transform:
   m_ObjectHideFlags: 0
@@ -18274,7 +18274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1402017140
 Transform:
   m_ObjectHideFlags: 0
@@ -31662,7 +31662,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: AltExtTerminal
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3472993307091024812, guid: 4fcbaab0fdb423740be672a83223b097, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -33243,18 +33244,18 @@ PrefabInstance:
     - target: {fileID: 2591666657095038802, guid: f072e0c44e001ae40a727764f964df54, type: 3}
       propertyPath: puzzle
       value: 
-      objectReference: {fileID: 2012674610}
+      objectReference: {fileID: 1981529050}
     - target: {fileID: 2591666657095038802, guid: f072e0c44e001ae40a727764f964df54, type: 3}
       propertyPath: interactionManager
       value: 
       objectReference: {fileID: 2067740895}
     - target: {fileID: 5608332870365458094, guid: f072e0c44e001ae40a727764f964df54, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.26
+      value: -0.1279
       objectReference: {fileID: 0}
     - target: {fileID: 5608332870365458094, guid: f072e0c44e001ae40a727764f964df54, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.106
+      value: -0.2727
       objectReference: {fileID: 0}
     - target: {fileID: 5608332870365458094, guid: f072e0c44e001ae40a727764f964df54, type: 3}
       propertyPath: m_LocalPosition.z
